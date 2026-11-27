@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#101b36">
+<meta name="description" content="UP Board Class 12 PCB 2027: Physics, Chemistry, Biology, Hindi, chapter-wise tests and revision practice.">
+<link rel="manifest" href="./inter-science-manifest.webmanifest">
+<link rel="icon" href="./inter-science-icon.svg" type="image/svg+xml">
 <title>UP Board Inter Science Master 2027</title>
 <style>
 :root{--bg:#0b1224;--panel:#131f39;--panel2:#1a2948;--line:#2c3d60;--text:#f5f7ff;--muted:#aebbd4;--blue:#71a7ff;--green:#58d6a2;--yellow:#ffd477}
@@ -578,4 +581,9 @@ const writingPrompts={physics:{2:'विद्युत क्षेत्र �
 function loadWritingPrompt(){const sub=document.getElementById('awSubject').value,marks=document.getElementById('awMarks').value;document.getElementById('awPrompt').textContent=writingPrompts[sub][marks];document.getElementById('awDraft').value=localStorage.getItem('upInterDraft-'+sub+'-'+marks)||'';document.getElementById('awStatus').textContent='';}
 function saveWritingDraft(){const sub=document.getElementById('awSubject').value,marks=document.getElementById('awMarks').value;localStorage.setItem('upInterDraft-'+sub+'-'+marks,document.getElementById('awDraft').value);document.getElementById('awStatus').textContent='ड्राफ्ट इस डिवाइस पर सेव हो गया।';}
 function calculateCountdown(){const val=document.getElementById('examDate').value;if(!val){document.getElementById('countdownResult').textContent='पहले परीक्षा की तारीख चुनें।';return;}const target=new Date(val+'T00:00:00');const today=new Date();today.setHours(0,0,0,0);const days=Math.ceil((target-today)/86400000);document.getElementById('countdownResult').textContent=days>0?'परीक्षा में '+days+' दिन बाकी हैं।':days===0?'आज परीक्षा की तारीख है।':'यह तारीख '+Math.abs(days)+' दिन पहले थी।';}
-</script></body></html>
+</script><script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./inter-science-sw.js").catch(() => {}));
+}
+</script>
+</body></html>
