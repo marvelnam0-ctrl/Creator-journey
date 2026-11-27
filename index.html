@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111027">
-<meta name="description" content="Creator Journey - simple creator toolkit">
+<meta name="description" content="PixelCraft AI - mobile-friendly creative design studio">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Creator Journey</title>
+<title>PixelCraft AI — Design Studio</title>
 <style>
 :root{--bg:#0b0b1c;--panel:#17172d;--muted:#aaa9c7;--text:#f7f6ff;--accent:#8d78ff;--line:#302e50}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#32245e 0,transparent 35%),var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
@@ -68,7 +68,7 @@ body.detail-view #dashboardBack{display:inline-flex}
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand">✦ Creator Journey</div><button id="dashboardBack" class="alt" type="button">← Dashboard</button></header>
+<header class="top"><div class="brand">✦ PixelCraft AI</div><button id="dashboardBack" class="alt" type="button">← Dashboard</button></header>
 <section class="hero"><div class="pill">CREATE • EDIT • SHARE</div><h1>Your creativity,<br><span class="grad">one journey.</span></h1><p class="muted">Photo preview, captions aur hashtag ideas — sab ek simple mobile-friendly jagah par.</p></section>
 
 
@@ -76,6 +76,7 @@ body.detail-view #dashboardBack{display:inline-flex}
 <h2>Dashboard</h2>
 <p class="muted">Choose a tool to get started.</p>
 <div class="home-tools">
+<a href="#designRequestTool"><b>🎨 AI Design Request</b><span>Customer ki design details se ready brief banao</span></a>
 <a href="#photoTool"><b>📸 Photo Preview</b><span>Phone photo dekho</span></a>
  <a href="#photoEnhanceTool"><b>✨ Photo Enhancement</b><span>4K export, glow up, filters & background tools</span></a>
 
@@ -91,6 +92,25 @@ body.detail-view #dashboardBack{display:inline-flex}
 </div>
 </section>
 
+
+
+<section class="card" id="designRequestTool">
+<h2>🎨 PixelCraft AI — Design Request</h2>
+<p class="muted">Customer ki requirement bharo. Ye tool ek clear design brief banayega jise copy karke ChatGPT mein bhej sakte ho.</p>
+<div class="field"><label for="designService">Design service</label><select id="designService"><option>YouTube Thumbnail</option><option>Instagram Post</option><option>Business Poster</option><option>Logo Design</option><option>Banner / Flyer</option><option>Photo Editing</option><option>Other Graphic Design</option></select></div>
+<div class="grid">
+<div class="field"><label for="designPlatform">Platform / size</label><select id="designPlatform"><option>YouTube 16:9</option><option>Instagram 1:1</option><option>Instagram Story 9:16</option><option>Facebook Post</option><option>Print poster</option><option>Not sure — recommend a size</option></select></div>
+<div class="field"><label for="designStyle">Design style</label><select id="designStyle"><option>Modern and professional</option><option>Bold and eye-catching</option><option>Minimal and clean</option><option>Luxury and premium</option><option>Colorful and playful</option><option>Suggest the best style</option></select></div>
+</div>
+<div class="field"><label for="designText">Exact text to show on design</label><input id="designText" maxlength="120" placeholder="e.g. 5 BEST STUDY TIPS"></div>
+<div class="field"><label for="designColors">Preferred colors</label><input id="designColors" maxlength="80" placeholder="e.g. black, yellow and white (optional)"></div>
+<div class="field"><label for="designDetails">Other instructions</label><textarea id="designDetails" maxlength="500" placeholder="Describe the topic, audience, mood, logo or important details..."></textarea></div>
+<div class="field"><label for="designReference">Reference photo (optional)</label><input id="designReference" type="file" accept="image/*"></div>
+<div class="actions"><button id="makeDesignBrief" type="button">Create design brief</button><button class="alt" id="copyDesignBrief" type="button">Copy brief</button></div>
+<div class="field"><label>Ready-to-send design brief</label><div class="out" id="designBriefOut">Your design brief will appear here.</div></div>
+<div class="status" id="designBriefStatus" aria-live="polite"></div>
+<p class="note">Demo limitation: this GitHub Pages site does not directly connect to ChatGPT or accept paid orders. The brief is created on this phone only. Copy it into this ChatGPT chat and attach the reference photo separately; I can then create the design. Do not enter private information or passwords.</p>
+</section>
 
 <section class="card" id="photoEnhanceTool">
 <h2>✨ Photo Enhancement Studio</h2>
@@ -309,11 +329,11 @@ document.querySelector('#enhanceReset').addEventListener('click',()=>{brightness
 document.querySelector('#autoEnhance').addEventListener('click',()=>{if(!enhanceImage){document.querySelector('#enhanceStatus').textContent='Pehle photo upload karein.';return;}const sample=document.createElement('canvas');sample.width=64;sample.height=64;const sx=sample.getContext('2d',{willReadFrequently:true});sx.drawImage(enhanceImage,0,0,64,64);const px=sx.getImageData(0,0,64,64).data;let total=0,count=0;for(let i=0;i<px.length;i+=16){total+=.2126*px[i]+.7152*px[i+1]+.0722*px[i+2];count++;}const average=total/count;brightness.value=Math.max(85,Math.min(125,Math.round(100+(128-average)*.28)));contrast.value=112;saturation.value=112;preset.value='none';window.enhanceTone='none';drawEnhanced();document.querySelector('#enhanceStatus').textContent='Free auto correction applied (light, contrast and color balance).';});
 document.querySelector('#warmTone').addEventListener('click',()=>{if(!enhanceImage){document.querySelector('#enhanceStatus').textContent='Pehle photo upload karein.';return;}window.enhanceTone='warm';drawEnhanced();document.querySelector('#enhanceStatus').textContent='Warm tone applied.';});
 document.querySelector('#coolTone').addEventListener('click',()=>{if(!enhanceImage){document.querySelector('#enhanceStatus').textContent='Pehle photo upload karein.';return;}window.enhanceTone='cool';drawEnhanced();document.querySelector('#enhanceStatus').textContent='Cool tone applied.';});
-function downloadEnhanced(longEdge){const status=document.querySelector('#enhanceStatus');if(!enhanceImage||!enhanceCanvas.width||!enhanceCanvas.height){status.textContent='Pehle photo upload hone dein, phir download karein.';return;}try{const sourceW=enhanceCanvas.width,sourceH=enhanceCanvas.height,scale=longEdge?Math.min(2, longEdge/Math.max(sourceW,sourceH)):1,targetW=Math.max(1,Math.round(sourceW*scale)),targetH=Math.max(1,Math.round(sourceH*scale));const out=document.createElement('canvas');out.width=targetW;out.height=targetH;const ctx=out.getContext('2d');if(!ctx)throw new Error('Canvas unavailable');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(enhanceCanvas,0,0,targetW,targetH);const save=url=>{const a=document.createElement('a');a.href=url;a.download=longEdge?'creator-journey-4k-size.png':'creator-journey-enhanced.png';document.body.appendChild(a);a.click();a.remove();if(url.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(url),3000);status.textContent=longEdge?'4K-size image export started.':'Enhanced photo download started.';};if(out.toBlob){out.toBlob(blob=>{if(blob)save(URL.createObjectURL(blob));else{try{save(out.toDataURL('image/png'));}catch(err){status.textContent='Download fail hua. Photo ka size kam karke try karein.';}}},'image/png');}else{save(out.toDataURL('image/png'));}}catch(err){status.textContent='Download nahi ho paya. Chhoti photo try karein.';console.error(err);}}
+function downloadEnhanced(longEdge){const status=document.querySelector('#enhanceStatus');if(!enhanceImage||!enhanceCanvas.width||!enhanceCanvas.height){status.textContent='Pehle photo upload hone dein, phir download karein.';return;}try{const sourceW=enhanceCanvas.width,sourceH=enhanceCanvas.height,scale=longEdge?Math.min(2, longEdge/Math.max(sourceW,sourceH)):1,targetW=Math.max(1,Math.round(sourceW*scale)),targetH=Math.max(1,Math.round(sourceH*scale));const out=document.createElement('canvas');out.width=targetW;out.height=targetH;const ctx=out.getContext('2d');if(!ctx)throw new Error('Canvas unavailable');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(enhanceCanvas,0,0,targetW,targetH);const save=url=>{const a=document.createElement('a');a.href=url;a.download=longEdge?'pixelcraft-ai-4k-size.png':'pixelcraft-ai-enhanced.png';document.body.appendChild(a);a.click();a.remove();if(url.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(url),3000);status.textContent=longEdge?'4K-size image export started.':'Enhanced photo download started.';};if(out.toBlob){out.toBlob(blob=>{if(blob)save(URL.createObjectURL(blob));else{try{save(out.toDataURL('image/png'));}catch(err){status.textContent='Download fail hua. Photo ka size kam karke try karein.';}}},'image/png');}else{save(out.toDataURL('image/png'));}}catch(err){status.textContent='Download nahi ho paya. Chhoti photo try karein.';console.error(err);}}
 document.querySelector('#enhanceDownload').addEventListener('click',()=>downloadEnhanced(0));
 document.querySelector('#export4k').addEventListener('click',()=>downloadEnhanced(3840));
 
-function generate(){const topic=document.querySelector('#topic').value.trim()||'meri nayi post';const tone=document.querySelector('#tone').value;const captions={friendly:`Ek chhota sa khoobsurat moment: ${topic}. Aapko kaisa laga?`,motivation:`Har din ek nayi shuruaat hai. Aaj ka focus: ${topic}. Keep creating!`,professional:`Sharing something about ${topic}. Thank you for being part of this journey.`,fun:`Aaj ka mood: ${topic} ✨ Comment mein apni baat batao!`};const words=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,3);const hashtags=['#CreatorJourney','#ContentCreator','#NewPost',...words.map(w=>'#'+w)];document.querySelector('#caption').textContent=captions[tone];document.querySelector('#tags').textContent=[...new Set(hashtags)].join(' ');document.querySelector('#status').textContent='Ideas ready! Post karne se pehle edit kar lena.';}
+function generate(){const topic=document.querySelector('#topic').value.trim()||'meri nayi post';const tone=document.querySelector('#tone').value;const captions={friendly:`Ek chhota sa khoobsurat moment: ${topic}. Aapko kaisa laga?`,motivation:`Har din ek nayi shuruaat hai. Aaj ka focus: ${topic}. Keep creating!`,professional:`Sharing something about ${topic}. Thank you for being part of this journey.`,fun:`Aaj ka mood: ${topic} ✨ Comment mein apni baat batao!`};const words=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,3);const hashtags=['#PixelCraftAI','#ContentCreator','#NewPost',...words.map(w=>'#'+w)];document.querySelector('#caption').textContent=captions[tone];document.querySelector('#tags').textContent=[...new Set(hashtags)].join(' ');document.querySelector('#status').textContent='Ideas ready! Post karne se pehle edit kar lena.';}
 document.querySelector('#make').addEventListener('click',generate);
 document.querySelector('#copy').addEventListener('click',async()=>{const t=document.querySelector('#caption').textContent+'\n\n'+document.querySelector('#tags').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#status').textContent='Copied!';}catch(e){document.querySelector('#status').textContent='Text select karke copy kar lo.';}});
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
@@ -337,11 +357,11 @@ function drawThumb(){
  const lineHeight=size*1.08;const total=lines.length*lineHeight;let y=360-total/2;
  lines.slice(0,3).forEach(t=>{ctx.strokeText(t,112,y);ctx.fillText(t,112,y);y+=lineHeight;});
  if(thumbSub.value.trim()){ctx.font='700 38px system-ui, sans-serif';ctx.fillStyle=colors[1];ctx.fillText(thumbSub.value.trim().slice(0,70),114,610);}
- ctx.fillStyle='rgba(255,255,255,.88)';ctx.font='700 22px system-ui,sans-serif';ctx.fillText('CREATOR JOURNEY',112,665);
+ ctx.fillStyle='rgba(255,255,255,.88)';ctx.font='700 22px system-ui,sans-serif';ctx.fillText('PIXELCRAFT AI',112,665);
 }
 [thumbTitle,thumbSub,thumbTheme].forEach(el=>el.addEventListener('input',drawThumb));
 thumbPhoto.addEventListener('change',()=>{const file=thumbPhoto.files&&thumbPhoto.files[0];if(!file)return;if(!file.type.startsWith('image/')){document.querySelector('#thumbStatus').textContent='Please choose an image.';return;}const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{thumbImage=im;drawThumb();document.querySelector('#thumbStatus').textContent='Photo added!';};im.src=reader.result;};reader.readAsDataURL(file);});
-document.querySelector('#thumbDownload').addEventListener('click',()=>{drawThumb();const a=document.createElement('a');a.download='creator-journey-thumbnail.png';a.href=thumbCanvas.toDataURL('image/png');a.click();document.querySelector('#thumbStatus').textContent='Thumbnail downloaded!';});
+document.querySelector('#thumbDownload').addEventListener('click',()=>{drawThumb();const a=document.createElement('a');a.download='pixelcraft-ai-thumbnail.png';a.href=thumbCanvas.toDataURL('image/png');a.click();document.querySelector('#thumbStatus').textContent='Thumbnail downloaded!';});
 document.querySelector('#thumbReset').addEventListener('click',()=>{thumbPhoto.value='';thumbTitle.value='MY NEW VIDEO';thumbSub.value='';thumbTheme.value='purple';thumbImage=null;drawThumb();document.querySelector('#thumbStatus').textContent='Reset complete.';});
 drawThumb();
 
@@ -386,5 +406,26 @@ function makeDescription(){const title=getCreatorTopic('descTitle'),summary=getC
 document.querySelector('#makeDescBtn').addEventListener('click',makeDescription);
 document.querySelector('#copyDescBtn').addEventListener('click',async()=>{const t=document.querySelector('#descOut').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#descStatus').textContent='Description copied!';}catch(e){document.querySelector('#descStatus').textContent='Text select karke copy kar lo.';}});
 document.querySelector('#resetChecksBtn').addEventListener('click',()=>{document.querySelectorAll('#publishChecks input[type=checkbox]').forEach(x=>x.checked=false);document.querySelector('#checkStatus').textContent='Checklist reset.';});
-\n</script>
+\n
+function buildDesignBrief(){
+ const service=document.querySelector('#designService').value;
+ const platform=document.querySelector('#designPlatform').value;
+ const style=document.querySelector('#designStyle').value;
+ const title=document.querySelector('#designText').value.trim();
+ const colors=document.querySelector('#designColors').value.trim()||'Choose a suitable color palette';
+ const details=document.querySelector('#designDetails').value.trim()||'Use good visual hierarchy and keep all text readable';
+ if(!title && !details){document.querySelector('#designBriefStatus').textContent='Design par dikhane wala text ya instructions likho.';return;}
+ const brief='PIXELCRAFT AI — CUSTOMER DESIGN REQUEST\n\nService: '+service+'\nFormat: '+platform+'\nStyle: '+style+'\nExact text: '+(title||'Create suitable text based on the instructions')+'\nColors: '+colors+'\nInstructions: '+details+'\n\nPlease create an original, polished design. Keep spelling accurate, make the main message readable on a mobile screen, and use the requested format.';
+ document.querySelector('#designBriefOut').textContent=brief;
+ document.querySelector('#designBriefStatus').textContent='Design brief ready. Copy it and send it in the PixelCraft AI ChatGPT chat.';
+}
+document.querySelector('#makeDesignBrief').addEventListener('click',buildDesignBrief);
+document.querySelector('#copyDesignBrief').addEventListener('click',async()=>{
+ const box=document.querySelector('#designBriefOut');
+ if(box.textContent==='Your design brief will appear here.'){buildDesignBrief();if(box.textContent==='Your design brief will appear here.')return;}
+ try{await navigator.clipboard.writeText(box.textContent);document.querySelector('#designBriefStatus').textContent='Brief copied! Reference photo ko alag se attach karna.';}
+ catch(e){document.querySelector('#designBriefStatus').textContent='Brief select karke copy kar lo.';}
+});
+
+</script>
 </body></html>
