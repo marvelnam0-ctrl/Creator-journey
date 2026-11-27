@@ -38,16 +38,42 @@ html{scroll-behavior:smooth}
 section[id]{scroll-margin-top:12px}
 @media(max-width:420px){.home-tools{grid-template-columns:1fr}}
 
+
+/* Clean single-screen dashboard navigation */
+body{background:#090b16}
+.wrap{max-width:980px;padding:22px}
+.top{padding:10px 2px 22px}
+.top .pill{display:none}
+.hero{display:none}
+#allToolsHome{border:0;background:transparent;padding:8px 0 24px}
+#allToolsHome h2{font-size:25px;margin-bottom:6px}
+#allToolsHome>p{margin:0 0 20px}
+.home-tools{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.home-tools a{min-height:92px;padding:19px;border-radius:16px;background:linear-gradient(145deg,#191c30,#111421);border-color:#292e45;display:flex;flex-direction:column;justify-content:center}
+.home-tools a b{font-size:15px}
+.home-tools a span{font-size:12px}
+.home-tools a:active{border-color:#9a8cff}
+#dashboardBack{display:none;background:#20243a;border:1px solid #343b57}
+body.detail-view .hero,body.detail-view #allToolsHome,body.detail-view footer{display:none!important}
+body.detail-view .wrap>section,body.detail-view .wrap>.grid{display:none}
+body.detail-view .wrap>section.active-page{display:block}
+body.detail-view .wrap>.grid.active-parent{display:grid}
+body.detail-view .wrap>.grid.active-parent>section:not(.active-page){display:none}
+body.detail-view #dashboardBack{display:inline-flex}
+.active-page{margin-top:4px}
+.page-back{margin:0 0 18px;background:#20243a;border:1px solid #343b57}
+@media(max-width:520px){.home-tools{grid-template-columns:1fr}.home-tools a{min-height:78px}.wrap{padding:16px}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand">✦ Creator Journey</div><span class="pill">FREE STARTER</span></header>
+<header class="top"><div class="brand">✦ Creator Journey</div><button id="dashboardBack" class="alt" type="button">← Dashboard</button></header>
 <section class="hero"><div class="pill">CREATE • EDIT • SHARE</div><h1>Your creativity,<br><span class="grad">one journey.</span></h1><p class="muted">Photo preview, captions aur hashtag ideas — sab ek simple mobile-friendly jagah par.</p></section>
 
 <section class="card" id="allToolsHome">
-<h2>✨ All Creator Tools</h2>
-<p class="muted">Kisi bhi tool par tap karo — woh seedha open ho jayega.</p>
+<h2>Dashboard</h2>
+<p class="muted">Choose a tool to get started.</p>
 <div class="home-tools">
 <a href="#photoTool"><b>📸 Photo Preview</b><span>Phone photo dekho</span></a>
  <a href="#photoEnhanceTool"><b>✨ Photo Enhancement</b><span>4K export, glow up, filters & background tools</span></a>
@@ -216,9 +242,18 @@ section[id]{scroll-margin-top:12px}
 <button class="alt" id="resetChecksBtn">Reset checklist</button>
 <div class="status" id="checkStatus" aria-live="polite"></div>
 </section>
-\n<footer>Creator Journey · Version 0.6 · Made for creators</footer>
+\n<footer>Creator Journey · Version 0.7</footer>
 </div>
 <script>
+
+const dashboardHome=document.querySelector('#allToolsHome');
+const dashboardBack=document.querySelector('#dashboardBack');
+function showDashboard(){document.body.classList.remove('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));history.replaceState(null,'',location.pathname+location.search);window.scrollTo({top:0,behavior:'smooth'});}
+function openDashboardPage(id){const page=document.getElementById(id);if(!page)return;document.body.classList.add('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));page.classList.add('active-page');if(page.parentElement.classList.contains('grid'))page.parentElement.classList.add('active-parent');let back=page.querySelector('.page-back');if(!back){back=document.createElement('button');back.type='button';back.className='page-back alt';back.textContent='← Back to Dashboard';back.addEventListener('click',showDashboard);page.insertBefore(back,page.firstChild);}history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'});}
+dashboardHome.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();openDashboardPage(link.getAttribute('href').slice(1));}));
+dashboardBack.addEventListener('click',showDashboard);
+if(location.hash&&document.getElementById(location.hash.slice(1)))openDashboardPage(location.hash.slice(1));
+
 const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
 photo.addEventListener('change',()=>{const f=photo.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){preview.textContent='Image file chuno.';return;}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(f);const im=document.createElement('img');im.src=photoUrl;im.alt='Selected photo preview';preview.replaceChildren(im);});
 
