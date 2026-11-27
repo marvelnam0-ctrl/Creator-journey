@@ -14,6 +14,9 @@
 <div class="notice">अब ऐप में 45 महत्वपूर्ण अभ्यास MCQ हैं — प्रत्येक विषय में 15 प्रश्न। ध्यान दें: ये अभ्यास प्रश्न हैं, आधिकारिक पिछले वर्षों के पेपर नहीं। संभावित प्रश्न केवल पाठ्यक्रम और सामान्य परीक्षा-पैटर्न के आधार पर अभ्यास के लिए हैं—परीक्षा में आने की गारंटी नहीं।</div>
 <section id="home"><div class="bar"><h2>आपका डैशबोर्ड</h2><span class="tag">हिंदी माध्यम</span></div>
 <div class="grid">
+<div class="card subject"><div class="icon">⚡</div><h3>Physics Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('physics')">Physics खोलें</button></div>
+<div class="card subject"><div class="icon">🧪</div><h3>Chemistry Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('chemistry')">Chemistry खोलें</button></div>
+<div class="card subject"><div class="icon">🧬</div><h3>Biology Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('biology')">Biology खोलें</button></div>
 <div class="card subject"><div class="icon">⚡</div><h3>भौतिक विज्ञान</h3><p>महत्वपूर्ण अवधारणाएँ और अभ्यास टेस्ट</p><button onclick="start('physics')">अभ्यास करें</button></div>
 <div class="card subject"><div class="icon">🧪</div><h3>रसायन विज्ञान</h3><p>अभिक्रियाएँ, सूत्र और प्रश्न</p><button onclick="start('chemistry')">अभ्यास करें</button></div>
 <div class="card subject"><div class="icon">🧬</div><h3>जीव विज्ञान</h3><p>आनुवंशिकी, मानव शरीर और वनस्पति</p><button onclick="start('biology')">अभ्यास करें</button></div>
@@ -89,6 +92,9 @@
 
 </section>
 
+<section id="subject-physics" class="hide written"><div class="bar"><h2>⚡ Physics Master Dashboard</h2><button class="secondary" onclick="show('home')">डैशबोर्ड</button></div><div class="notice">पाठ्यक्रम-आधारित महत्वपूर्ण अभ्यास; प्रश्न आने की गारंटी नहीं।</div><div id="physics-content"></div></section>
+<section id="subject-chemistry" class="hide written"><div class="bar"><h2>🧪 Chemistry Master Dashboard</h2><button class="secondary" onclick="show('home')">डैशबोर्ड</button></div><div class="notice">पाठ्यक्रम-आधारित महत्वपूर्ण अभ्यास; प्रश्न आने की गारंटी नहीं।</div><div id="chemistry-content"></div></section>
+<section id="subject-biology" class="hide written"><div class="bar"><h2>🧬 Biology Master Dashboard</h2><button class="secondary" onclick="show('home')">डैशबोर्ड</button></div><div class="notice">पाठ्यक्रम-आधारित महत्वपूर्ण अभ्यास; प्रश्न आने की गारंटी नहीं।</div><div id="biology-content"></div></section>
 <section id="test" class="hide"><div class="bar"><div><div class="small" id="testSubject">अभ्यास टेस्ट</div><h2 id="testTitle">प्रश्न</h2></div><span class="tag" id="timer">15:00</span></div><div class="small" id="progress"></div><div id="questions"></div><div class="bar"><button class="secondary" id="prev" onclick="move(-1)">पिछला</button><button id="next" onclick="move(1)">अगला</button></div><button id="submit" onclick="finish()" class="hide">टेस्ट जमा करें</button><div id="result"></div></section>
 <footer>UP Board Inter Science Master 2027 • अभ्यास हेतु शैक्षिक ऐप<br>यह UPMSP का आधिकारिक ऐप नहीं है।</footer>
 </main>
@@ -146,7 +152,7 @@ biology:[
 ["PCR तकनीक का उपयोग किसके प्रवर्धन में होता है?",["DNA","वसा","स्टार्च","प्रोटीन"],0,"PCR द्वारा DNA के विशिष्ट खंड की अनेक प्रतियाँ बनाई जाती हैं।"]
 ]};
 let mode='physics',items=[],idx=0,answers={},remaining=900,clock=null;
-function show(id){['home','topics','papers','written','priority','test'].forEach(x=>document.getElementById(x).classList.toggle('hide',x!==id));if(clock){clearInterval(clock);clock=null;}}
+function show(id){['home','topics','papers','written','priority','subject-physics','subject-chemistry','subject-biology','test'].forEach(x=>document.getElementById(x).classList.toggle('hide',x!==id));if(clock){clearInterval(clock);clock=null;}}
 function start(m){mode=m;items=m==='mixed'?[...bank.physics.slice(0,5),...bank.chemistry.slice(0,5),...bank.biology.slice(0,5)]:bank[m];idx=0;answers={};remaining=900;document.getElementById('testTitle').textContent=m==='mixed'?'मिश्रित मॉक टेस्ट':({physics:'भौतिक विज्ञान',chemistry:'रसायन विज्ञान',biology:'जीव विज्ञान'}[m]+' अभ्यास टेस्ट');document.getElementById('testSubject').textContent='हर प्रश्न 1 अंक • नमूना अभ्यास';document.getElementById('result').innerHTML='';document.getElementById('submit').classList.add('hide');show('test');render();if(clock)clearInterval(clock);clock=setInterval(()=>{remaining--;document.getElementById('timer').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');if(remaining<=0)finish();},1000);}
 function render(){let q=items[idx];document.getElementById('progress').textContent='प्रश्न '+(idx+1)+' / '+items.length;document.getElementById('questions').innerHTML='<div class="question"><h3>'+(idx+1)+'. '+q[0]+'</h3>'+q[1].map((o,i)=>'<label class="option"><input type="radio" name="answer" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="answers['+idx+']='+i+'"> '+String.fromCharCode(65+i)+'. '+o+'</label>').join('')+'</div>';document.getElementById('prev').disabled=idx===0;document.getElementById('next').classList.toggle('hide',idx===items.length-1);document.getElementById('submit').classList.toggle('hide',idx!==items.length-1);}
 function move(d){idx=Math.max(0,Math.min(items.length-1,idx+d));render();}
