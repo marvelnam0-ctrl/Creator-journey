@@ -9,9 +9,20 @@
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#15264b 0,#0b1224 45%);color:var(--text);font:15px system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;min-height:100vh}.wrap{max-width:920px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.tag{border:1px solid #45618e;color:#c6dcff;border-radius:30px;padding:7px 11px;font-size:12px}.hero{padding:30px 0 18px}h1{font-size:clamp(29px,7vw,46px);line-height:1.12;margin:10px 0}p{color:var(--muted);line-height:1.65}.sub{color:#c4d7ff;font-weight:650}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:17px}.card h3{margin:7px 0}.card p{font-size:13px;margin:5px 0 12px}.icon{font-size:25px}button,a.btn{border:0;border-radius:12px;padding:12px 15px;background:var(--blue);color:#08152d;font-weight:750;font-size:14px;text-decoration:none;display:inline-block;cursor:pointer}.secondary{background:#263958;color:#edf4ff;border:1px solid #40577d}button:disabled{opacity:.5}.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 12px}section{margin:20px 0}.hide{display:none}.notice{background:#2b281b;border:1px solid #64552a;color:#ffe8a8;padding:12px;border-radius:12px;font-size:13px;line-height:1.55}.subject{border-left:4px solid var(--blue)}.question{padding:16px;margin:12px 0;background:var(--panel);border:1px solid var(--line);border-radius:15px}.question h3{font-size:16px;line-height:1.5;margin:0 0 12px}.option{display:block;padding:10px;margin:7px 0;background:#1a2948;border:1px solid #354a70;border-radius:10px;cursor:pointer}.option input{margin-right:8px;accent-color:var(--blue)}.muted{color:var(--muted)}.result{padding:16px;border-radius:14px;background:#142e2c;border:1px solid #286455}.small{font-size:12px;color:var(--muted)}select{background:#1a2948;color:white;border:1px solid #40577d;border-radius:10px;padding:11px;width:100%;margin:8px 0}footer{padding:25px 0;color:var(--muted);font-size:12px}.written details{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}.written summary{cursor:pointer;font-weight:700;line-height:1.5}.written .answer{color:#d5e3fa;line-height:1.75;padding:10px 4px 0}.mark{color:var(--yellow);font-size:12px;font-weight:700}.paper{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}@media(max-width:520px){.wrap{padding:14px}.grid{grid-template-columns:1fr}.hero{padding-top:22px}}
 </style></head>
 <body><main class="wrap">
-<div class="top"><strong>📘 INTER SCIENCE MASTER</strong><span class="tag">कक्षा 12 • PCB • 2027</span></div>
+<div class="top"><strong>📘 INTER SCIENCE MASTER</strong><div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end"><span class="tag">कक्षा 12 • PCB • 2027</span><button class="secondary" style="padding:9px 11px" onclick="openAccount()">👤 Login / Profile</button></div></div>
 <div class="hero"><div class="sub">उत्तर प्रदेश माध्यमिक शिक्षा परिषद</div><h1>बोर्ड परीक्षा की तैयारी,<br>अब आसान तरीके से।</h1><p>भौतिक विज्ञान • रसायन विज्ञान • जीव विज्ञान<br>हिंदी में अभ्यास, मॉक टेस्ट और परीक्षा जैसा अनुभव।</p></div>
 <div class="notice">अब ऐप में 45 महत्वपूर्ण अभ्यास MCQ हैं — प्रत्येक विषय में 15 प्रश्न। ध्यान दें: ये अभ्यास प्रश्न हैं, आधिकारिक पिछले वर्षों के पेपर नहीं। संभावित प्रश्न केवल पाठ्यक्रम और सामान्य परीक्षा-पैटर्न के आधार पर अभ्यास के लिए हैं—परीक्षा में आने की गारंटी नहीं।</div>
+<section id="account" class="hide">
+<div class="bar"><h2>👤 Login / Student Profile</h2><button class="secondary" onclick="show('home')">वापस</button></div>
+<div class="card" id="accountCard">
+<h3>अपने स्टडी प्रोफाइल में प्रवेश करें</h3>
+<p>अपना नाम लिखकर प्रोफाइल शुरू करें। पासवर्ड या निजी जानकारी देने की जरूरत नहीं है।</p>
+<label for="studentName">आपका नाम</label>
+<input id="studentName" type="text" maxlength="40" placeholder="अपना नाम लिखें" style="width:100%;padding:12px;border-radius:10px;border:1px solid #40577d;background:#1a2948;color:white;margin:8px 0 14px">
+<button onclick="saveProfile()">Continue / Login</button>
+</div>
+<div class="notice" style="margin-top:12px">यह अभी इस डिवाइस के ब्राउज़र में सेव होने वाला साधारण लोकल प्रोफाइल है। यह असली ऑनलाइन अकाउंट, पासवर्ड-आधारित लॉगिन या क्लाउड सिंक नहीं है। ब्राउज़र का डेटा हटाने पर प्रोफाइल मिट सकता है।</div>
+</section>
 <section id="home"><div class="bar"><h2>आपका डैशबोर्ड</h2><span class="tag">हिंदी माध्यम</span></div>
 <div class="grid">
 <div class="card subject"><div class="icon">⚡</div><h3>Physics Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('physics')">Physics खोलें</button></div>
@@ -152,7 +163,7 @@ biology:[
 ["PCR तकनीक का उपयोग किसके प्रवर्धन में होता है?",["DNA","वसा","स्टार्च","प्रोटीन"],0,"PCR द्वारा DNA के विशिष्ट खंड की अनेक प्रतियाँ बनाई जाती हैं।"]
 ]};
 let mode='physics',items=[],idx=0,answers={},remaining=900,clock=null;
-function show(id){['home','topics','papers','written','priority','subject-physics','subject-chemistry','subject-biology','test'].forEach(x=>document.getElementById(x).classList.toggle('hide',x!==id));if(clock){clearInterval(clock);clock=null;}}
+function show(id){['home','account','topics','papers','written','priority','subject-physics','subject-chemistry','subject-biology','test'].forEach(x=>document.getElementById(x).classList.toggle('hide',x!==id));if(clock){clearInterval(clock);clock=null;}}
 function start(m){mode=m;items=m==='mixed'?[...bank.physics.slice(0,5),...bank.chemistry.slice(0,5),...bank.biology.slice(0,5)]:bank[m];idx=0;answers={};remaining=900;document.getElementById('testTitle').textContent=m==='mixed'?'मिश्रित मॉक टेस्ट':({physics:'भौतिक विज्ञान',chemistry:'रसायन विज्ञान',biology:'जीव विज्ञान'}[m]+' अभ्यास टेस्ट');document.getElementById('testSubject').textContent='हर प्रश्न 1 अंक • नमूना अभ्यास';document.getElementById('result').innerHTML='';document.getElementById('submit').classList.add('hide');show('test');render();if(clock)clearInterval(clock);clock=setInterval(()=>{remaining--;document.getElementById('timer').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');if(remaining<=0)finish();},1000);}
 function render(){let q=items[idx];document.getElementById('progress').textContent='प्रश्न '+(idx+1)+' / '+items.length;document.getElementById('questions').innerHTML='<div class="question"><h3>'+(idx+1)+'. '+q[0]+'</h3>'+q[1].map((o,i)=>'<label class="option"><input type="radio" name="answer" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="answers['+idx+']='+i+'"> '+String.fromCharCode(65+i)+'. '+o+'</label>').join('')+'</div>';document.getElementById('prev').disabled=idx===0;document.getElementById('next').classList.toggle('hide',idx===items.length-1);document.getElementById('submit').classList.toggle('hide',idx!==items.length-1);}
 function move(d){idx=Math.max(0,Math.min(items.length-1,idx+d));render();}
@@ -320,6 +331,31 @@ long:[
 };
 
 
+function openAccount(){
+ show('account');
+ const p=JSON.parse(localStorage.getItem('upInterProfile')||'null');
+ const card=document.getElementById('accountCard');
+ if(p){
+  card.innerHTML='<div style="display:flex;align-items:center;gap:14px"><div style="font-size:34px;background:#263958;border-radius:50%;padding:12px">👤</div><div><h3 style="margin:0">'+safeText(p.name)+'</h3><p style="margin:4px 0">कक्षा 12 • PCB • UP Board 2027</p><span class="tag">प्रोफाइल सक्रिय</span></div></div><hr style="border-color:var(--line);margin:18px 0"><button onclick="editProfile()" class="secondary">नाम बदलें</button> <button onclick="logoutProfile()" style="background:#6b3340;color:white">Logout</button>';
+ }else{
+  card.innerHTML='<h3>अपने स्टडी प्रोफाइल में प्रवेश करें</h3><p>अपना नाम लिखकर प्रोफाइल शुरू करें। पासवर्ड या निजी जानकारी देने की जरूरत नहीं है।</p><label for="studentName">आपका नाम</label><input id="studentName" type="text" maxlength="40" placeholder="अपना नाम लिखें" style="width:100%;padding:12px;border-radius:10px;border:1px solid #40577d;background:#1a2948;color:white;margin:8px 0 14px"><button onclick="saveProfile()">Continue / Login</button>';
+ }
+}
+function saveProfile(){
+ const input=document.getElementById('studentName');
+ const name=(input.value||'').trim();
+ if(!name){alert('कृपया अपना नाम लिखें।');return;}
+ localStorage.setItem('upInterProfile',JSON.stringify({name:name}));
+ openAccount();
+}
+function editProfile(){
+ const p=JSON.parse(localStorage.getItem('upInterProfile')||'null');
+ document.getElementById('accountCard').innerHTML='<h3>प्रोफाइल अपडेट करें</h3><label for="studentName">आपका नाम</label><input id="studentName" type="text" maxlength="40" value="'+safeText(p?p.name:'')+'" style="width:100%;padding:12px;border-radius:10px;border:1px solid #40577d;background:#1a2948;color:white;margin:8px 0 14px"><button onclick="saveProfile()">Save Profile</button>';
+}
+function logoutProfile(){
+ localStorage.removeItem('upInterProfile');
+ openAccount();
+}
 function safeText(v){return String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function openSubject(key){
  show('subject-'+key);
