@@ -1,0 +1,9 @@
+{
+  "name": "Creator Journey",
+  "short_name": "Creator Journey",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b0b1c",
+  "theme_color": "#111027",
+  "description": "A simple creator toolkit"
+}

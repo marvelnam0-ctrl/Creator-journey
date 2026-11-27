@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111027">
+<meta name="description" content="Creator Journey - simple creator toolkit">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Creator Journey</title>
+<style>
+:root{--bg:#0b0b1c;--panel:#17172d;--muted:#aaa9c7;--text:#f7f6ff;--accent:#8d78ff;--line:#302e50}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#32245e 0,transparent 35%),var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:850px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-weight:850;font-size:20px}.pill{font-size:11px;padding:6px 10px;border:1px solid #51458a;border-radius:30px;color:#d5ceff;background:#211c40}
+.hero{padding:30px 0 20px}h1{font-size:clamp(34px,8vw,52px);line-height:1.04;margin:12px 0}.grad{background:linear-gradient(90deg,#c2b6ff,#8bcbff);background-clip:text;color:transparent}.muted{color:var(--muted);line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:linear-gradient(160deg,#1d1c38,#141429);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:14px}.card h2{font-size:17px;margin:0 0 12px}.field{margin:12px 0}.field label{display:block;color:#d0cde5;font-size:13px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:12px;border-radius:11px;border:1px solid #414064;background:#101024;color:var(--text);font:inherit}textarea{min-height:80px}
+button{border:0;border-radius:11px;padding:12px 15px;background:var(--accent);color:white;font-weight:750;cursor:pointer}button.alt{background:#292744;border:1px solid #49466f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.preview{min-height:170px;border:1px dashed #514d78;border-radius:13px;display:grid;place-items:center;text-align:center;padding:10px;color:var(--muted);overflow:hidden}.preview img{max-width:100%;max-height:260px;object-fit:contain}
+.out{white-space:pre-wrap;line-height:1.55;background:#101024;border:1px solid #3b395c;border-radius:11px;padding:12px;min-height:60px}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tool{padding:13px;border:1px solid var(--line);border-radius:13px;background:#131329}.tool b{display:block;margin-bottom:4px}.tool span{font-size:12px;color:var(--muted)}
+.note{font-size:12px;color:#aaa9c7;line-height:1.5;margin-top:12px}.status{font-size:12px;color:#bdb4ff;min-height:18px}
+footer{text-align:center;color:#777693;font-size:12px;padding:18px}
+@media(max-width:620px){.grid{grid-template-columns:1fr}.wrap{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">✦ Creator Journey</div><span class="pill">FREE STARTER</span></header>
+<section class="hero"><div class="pill">CREATE • EDIT • SHARE</div><h1>Your creativity,<br><span class="grad">one journey.</span></h1><p class="muted">Photo preview, captions aur hashtag ideas — sab ek simple mobile-friendly jagah par.</p></section>
+<section class="card">
+<h2>📸 Photo preview</h2><div class="field"><label for="photo">Apne phone se photo chuno</label><input id="photo" type="file" accept="image/*"></div><div class="preview" id="preview">Tumhari photo yahan dikhegi.</div>
+<p class="note">Privacy: is demo mein photo sirf tumhare browser mein preview hoti hai; server par upload nahi hoti.</p>
+</section>
+<div class="grid">
+<section class="card">
+<h2>✍️ Caption helper</h2>
+<div class="field"><label for="topic">Post kis baare mein hai?</label><input id="topic" placeholder="Jaise: sunset, travel, study"></div>
+<div class="field"><label for="tone">Caption style</label><select id="tone"><option value="friendly">Friendly</option><option value="motivation">Motivational</option><option value="professional">Professional</option><option value="fun">Fun</option></select></div>
+<button id="make">Caption banao</button>
+<div class="field"><label>Caption idea</label><div class="out" id="caption">Caption yahan aayega.</div></div>
+<div class="field"><label>Hashtag ideas</label><div class="out" id="tags">Hashtags yahan aayenge.</div></div>
+<div class="actions"><button class="alt" id="copy">Copy text</button></div><div class="status" id="status" aria-live="polite"></div>
+</section>
+<section class="card">
+<h2>🚀 Creator tools</h2>
+<div class="tools">
+<div class="tool"><b>🖼️ Photo editor</b><span>Next update</span></div>
+<div class="tool"><b>🎬 Reels maker</b><span>Next update</span></div>
+<div class="tool"><b>🔖 Thumbnail maker</b><span>Next update</span></div>
+<div class="tool"><b># Hashtag helper</b><span>Available now</span></div>
+</div>
+<p class="note">Abhi ye starter version hai. Advanced AI, video export aur social posting baad ke versions mein add honge.</p>
+</section>
+</div>
+<footer>Creator Journey · Version 0.2 · Made for creators</footer>
+</div>
+<script>
+const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
+photo.addEventListener('change',()=>{const f=photo.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){preview.textContent='Image file chuno.';return;}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(f);const im=document.createElement('img');im.src=photoUrl;im.alt='Selected photo preview';preview.replaceChildren(im);});
+function generate(){const topic=document.querySelector('#topic').value.trim()||'meri nayi post';const tone=document.querySelector('#tone').value;const captions={friendly:`Ek chhota sa khoobsurat moment: ${topic}. Aapko kaisa laga?`,motivation:`Har din ek nayi shuruaat hai. Aaj ka focus: ${topic}. Keep creating!`,professional:`Sharing something about ${topic}. Thank you for being part of this journey.`,fun:`Aaj ka mood: ${topic} ✨ Comment mein apni baat batao!`};const words=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,3);const hashtags=['#CreatorJourney','#ContentCreator','#NewPost',...words.map(w=>'#'+w)];document.querySelector('#caption').textContent=captions[tone];document.querySelector('#tags').textContent=[...new Set(hashtags)].join(' ');document.querySelector('#status').textContent='Ideas ready! Post karne se pehle edit kar lena.';}
+document.querySelector('#make').addEventListener('click',generate);
+document.querySelector('#copy').addEventListener('click',async()=>{const t=document.querySelector('#caption').textContent+'\n\n'+document.querySelector('#tags').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#status').textContent='Copied!';}catch(e){document.querySelector('#status').textContent='Text select karke copy kar lo.';}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
