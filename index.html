@@ -64,12 +64,27 @@ body.detail-view #dashboardBack{display:inline-flex}
 .page-back{margin:0 0 18px;background:#20243a;border:1px solid #343b57}
 @media(max-width:520px){.home-tools{grid-template-columns:1fr}.home-tools a{min-height:78px}.wrap{padding:16px}}
 
+
+/* Start with only the Dashboard entry point visible */
+#allToolsHome{display:none}
+body:not(.dashboard-open) .wrap>section:not(#landingScreen),
+body:not(.dashboard-open) .wrap>footer,
+body:not(.dashboard-open) #dashboardBack{display:none!important}
+body.dashboard-open #landingScreen{display:none!important}
+body.dashboard-open:not(.detail-view) .wrap>section:not(#allToolsHome){display:none}
+body.dashboard-open:not(.detail-view) #allToolsHome{display:block}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ Creator Journey</div><button id="dashboardBack" class="alt" type="button">← Dashboard</button></header>
 <section class="hero"><div class="pill">CREATE • EDIT • SHARE</div><h1>Your creativity,<br><span class="grad">one journey.</span></h1><p class="muted">Photo preview, captions aur hashtag ideas — sab ek simple mobile-friendly jagah par.</p></section>
+
+<section class="card" id="landingScreen" style="margin-top:24px;text-align:center;padding:34px 20px">
+<h2 style="font-size:24px;margin-bottom:10px">Welcome to Creator Journey</h2>
+<p class="muted">Apna creator workspace kholne ke liye Dashboard par tap karein.</p>
+<button id="openMainDashboard" type="button" style="min-width:180px;margin-top:12px">☰ Dashboard</button>
+</section>
 
 <section class="card" id="allToolsHome">
 <h2>Dashboard</h2>
@@ -242,16 +257,17 @@ body.detail-view #dashboardBack{display:inline-flex}
 <button class="alt" id="resetChecksBtn">Reset checklist</button>
 <div class="status" id="checkStatus" aria-live="polite"></div>
 </section>
-\n<footer>Creator Journey · Version 0.7</footer>
+\n<footer>Creator Journey · Version 0.8</footer>
 </div>
 <script>
 
 const dashboardHome=document.querySelector('#allToolsHome');
 const dashboardBack=document.querySelector('#dashboardBack');
-function showDashboard(){document.body.classList.remove('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));history.replaceState(null,'',location.pathname+location.search);window.scrollTo({top:0,behavior:'smooth'});}
-function openDashboardPage(id){const page=document.getElementById(id);if(!page)return;document.body.classList.add('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));page.classList.add('active-page');if(page.parentElement.classList.contains('grid'))page.parentElement.classList.add('active-parent');let back=page.querySelector('.page-back');if(!back){back=document.createElement('button');back.type='button';back.className='page-back alt';back.textContent='← Back to Dashboard';back.addEventListener('click',showDashboard);page.insertBefore(back,page.firstChild);}history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'});}
+function showDashboard(){document.body.classList.add('dashboard-open');document.body.classList.remove('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));history.replaceState(null,'',location.pathname+location.search);window.scrollTo({top:0,behavior:'smooth'});}
+function openDashboardPage(id){document.body.classList.add('dashboard-open');const page=document.getElementById(id);if(!page)return;document.body.classList.add('detail-view');document.querySelectorAll('.active-page,.active-parent').forEach(el=>el.classList.remove('active-page','active-parent'));page.classList.add('active-page');if(page.parentElement.classList.contains('grid'))page.parentElement.classList.add('active-parent');let back=page.querySelector('.page-back');if(!back){back=document.createElement('button');back.type='button';back.className='page-back alt';back.textContent='← Back to Dashboard';back.addEventListener('click',showDashboard);page.insertBefore(back,page.firstChild);}history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'});}
 dashboardHome.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();openDashboardPage(link.getAttribute('href').slice(1));}));
 dashboardBack.addEventListener('click',showDashboard);
+document.querySelector('#openMainDashboard').addEventListener('click',showDashboard);
 if(location.hash&&document.getElementById(location.hash.slice(1)))openDashboardPage(location.hash.slice(1));
 
 const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
