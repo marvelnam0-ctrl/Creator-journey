@@ -320,7 +320,7 @@ function finish(){
  const history=JSON.parse(localStorage.getItem('upInterTestHistory')||'[]');
  history.push({mode,score,total:items.length,date:new Date().toLocaleDateString('hi-IN'),wrong:wrong.length});
  localStorage.setItem('upInterTestHistory',JSON.stringify(history.slice(-50)));
- const byMode={};history.forEach(h=>{if(h.mode!=='mixed'){byMode[h.mode]??={score:0,total:0};byMode[h.mode].score+=h.score;byMode[h.mode].total+=h.total;}});
+ const byMode={};history.forEach(h=>{if(['physics','chemistry','biology'].includes(h.mode)){byMode[h.mode]??={score:0,total:0};byMode[h.mode].score+=h.score;byMode[h.mode].total+=h.total;}});
  const weak=Object.entries(byMode).sort((x,y)=>(x[1].score/x[1].total)-(y[1].score/y[1].total))[0];
  document.getElementById('questions').innerHTML=items.map((q,i)=>'<div class="question"><b>'+(i+1)+'. '+safeText(q[0])+'</b><p>आपका उत्तर: '+(answers[i]===undefined?'नहीं दिया':safeText(q[1][answers[i]]))+'</p><p style="color:var(--green)">सही उत्तर: '+safeText(q[1][q[2]])+'</p><p>'+safeText(q[3]||'')+'</p>'+(answers[i]===q[2]?'<span class="mark">सही</span>':'<span style="color:#ffb4b4;font-weight:700">गलत / छोड़ा गया</span>')+'</div>').join('');
  document.getElementById('progress').textContent='टेस्ट पूरा हुआ';
