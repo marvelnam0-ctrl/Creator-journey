@@ -121,7 +121,7 @@ body.detail-view #dashboardBack{display:inline-flex}
 </section>
 
 <section class="card" id="photoTool">
-<h2>📸 Photo preview</h2><div class="field"><label for="photo">Apne phone se photo chuno</label><input id="photo" type="file" accept="image/*"></div><div class="preview" id="preview">Tumhari photo yahan dikhegi.</div>
+<h2>📸 Photo preview</h2><div class="field"><label for="photo">Apne phone se photo chuno</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="status" id="photoStatus" aria-live="polite">JPG, PNG ya WEBP photo select karein.</div><div class="preview" id="preview">Tumhari photo yahan dikhegi.</div>
 <p class="note">Privacy: is demo mein photo sirf tumhare browser mein preview hoti hai; server par upload nahi hoti.</p>
 </section>
 <div class="grid">
@@ -263,12 +263,12 @@ dashboardHome.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListen
 dashboardBack.addEventListener('click',showDashboard);
 if(location.hash&&document.getElementById(location.hash.slice(1)))openDashboardPage(location.hash.slice(1));
 
-const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
-photo.addEventListener('change',()=>{const f=photo.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){preview.textContent='Image file chuno.';return;}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(f);const im=document.createElement('img');im.src=photoUrl;im.alt='Selected photo preview';preview.replaceChildren(im);});
+const photo=document.querySelector('#photo'),preview=document.querySelector('#preview'),photoStatus=document.querySelector('#photoStatus');
+photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)){photoStatus.textContent='Please JPG, PNG ya WEBP photo select karein.';return;}photoStatus.textContent='Photo load ho rahi hai...';const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{im.alt='Selected photo preview';preview.replaceChildren(im);photoStatus.textContent='Photo preview ready.';};im.onerror=()=>{photoStatus.textContent='Photo open nahi hui. Dusri JPG/PNG photo try karein.';};im.src=reader.result;};reader.onerror=()=>{photoStatus.textContent='Photo read nahi ho paayi. Dobara select karein.';};reader.readAsDataURL(f);});
 
 const enhanceInput=document.querySelector('#enhancePhoto'),enhancePreview=document.querySelector('#enhancePreview');
 const enhanceCanvas=document.createElement('canvas'),enhanceCtx=enhanceCanvas.getContext('2d',{willReadFrequently:true});
-let enhanceImage=null,enhanceUrl='',photoRotation=0,photoFlipped=false,bgSample=null,bgPickMode=false;
+let enhanceImage=null,photoRotation=0,photoFlipped=false,bgSample=null,bgPickMode=false;
 const brightness=document.querySelector('#enhanceBrightness'),contrast=document.querySelector('#enhanceContrast'),saturation=document.querySelector('#enhanceSaturation'),preset=document.querySelector('#enhancePreset'),bgTolerance=document.querySelector('#bgTolerance');
 function drawEnhanced(){
  if(!enhanceImage)return;
@@ -296,7 +296,7 @@ function drawEnhanced(){
  document.querySelector('#saturationValue').textContent=saturation.value+'%';
  document.querySelector('#bgToleranceValue').textContent=bgTolerance.value;
 }
-enhanceInput.addEventListener('change',()=>{const f=enhanceInput.files&&enhanceInput.files[0];if(!f)return;const status=document.querySelector('#enhanceStatus');if(!f.type.startsWith('image/')){status.textContent='Is photo format ko browser read nahi kar pa raha. JPG ya PNG try karein.';return;}if(enhanceUrl)URL.revokeObjectURL(enhanceUrl);enhanceUrl=URL.createObjectURL(f);enhanceImage=new Image();enhanceImage.onload=()=>{try{photoRotation=0;photoFlipped=false;bgSample=null;bgPickMode=false;drawEnhanced();status.textContent='Photo preview ready. Ab enhance ya download kar sakte hain.';document.querySelector('#bgStatus').textContent='Pick background color dabakar photo ke background par tap karein.';}catch(err){status.textContent='Photo bahut badi hai ya process nahi ho pa rahi. Chhoti JPG/PNG photo try karein.';console.error(err);}};enhanceImage.onerror=()=>{status.textContent='Photo open nahi hui. JPG ya PNG image try karein.';};enhanceImage.src=enhanceUrl;});
+enhanceInput.addEventListener('change',()=>{const f=enhanceInput.files&&enhanceInput.files[0];if(!f)return;const status=document.querySelector('#enhanceStatus');if(!['image/jpeg','image/png','image/webp'].includes(f.type)){status.textContent='Please JPG, PNG ya WEBP photo select karein.';return;}status.textContent='Photo load ho rahi hai...';const reader=new FileReader();reader.onload=()=>{enhanceImage=new Image();enhanceImage.onload=()=>{try{photoRotation=0;photoFlipped=false;bgSample=null;bgPickMode=false;drawEnhanced();status.textContent='Photo preview ready. Ab enhance ya download kar sakte hain.';document.querySelector('#bgStatus').textContent='Pick background color dabakar photo ke background par tap karein.';}catch(err){status.textContent='Photo process nahi ho pa rahi. Chhoti JPG/PNG photo try karein.';console.error(err);}};enhanceImage.onerror=()=>{status.textContent='Photo open nahi hui. Dusri JPG/PNG photo try karein.';};enhanceImage.src=reader.result;};reader.onerror=()=>{status.textContent='Photo read nahi ho paayi. Dobara select karein.';};reader.readAsDataURL(f);});
 [brightness,contrast,saturation,preset,bgTolerance].forEach(el=>el.addEventListener('input',drawEnhanced));
 document.querySelector('#rotateLeft').addEventListener('click',()=>{photoRotation=(photoRotation+270)%360;drawEnhanced();});
 document.querySelector('#rotateRight').addEventListener('click',()=>{photoRotation=(photoRotation+90)%360;drawEnhanced();});
