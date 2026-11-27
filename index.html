@@ -26,6 +26,8 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 .thumb-preview{width:100%;aspect-ratio:16/9;background:#101024;border:1px solid #414064;border-radius:13px;overflow:hidden}
 .thumb-preview canvas{width:100%;height:100%;display:block}
 @media(max-width:620px){.thumb-grid{grid-template-columns:1fr}}
+
+.video-output{white-space:pre-wrap;line-height:1.6;background:#101024;border:1px solid #3b395c;border-radius:11px;padding:13px;min-height:100px;color:#eee}
 </style>
 </head>
 <body>
@@ -74,6 +76,21 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 </div>
 <p class="note">Tip: Title chhota aur readable rakho. Photo aur text browser mein hi process hote hain; upload nahi hote.</p>
 </section>
+
+<section class="card">
+<h2>🤖 AI Video Generator</h2>
+<p class="muted">Apne idea se AI video prompt aur scene-by-scene storyboard taiyar karo.</p>
+<div class="field"><label for="videoIdea">Video idea</label><textarea id="videoIdea" placeholder="Jaise: ek futuristic city mein flying cars..."></textarea></div>
+<div class="grid">
+<div class="field"><label for="videoStyle">Video style</label><select id="videoStyle"><option value="cinematic">Cinematic</option><option value="anime">Anime</option><option value="realistic">Ultra realistic</option><option value="3d">3D animation</option><option value="documentary">Documentary</option></select></div>
+<div class="field"><label for="videoDuration">Duration</label><select id="videoDuration"><option value="15 seconds">15 seconds</option><option value="30 seconds">30 seconds</option><option value="60 seconds">60 seconds</option></select></div>
+</div>
+<div class="field"><label for="videoFormat">Format</label><select id="videoFormat"><option value="9:16 vertical (Reels/Shorts)">9:16 Vertical (Reels/Shorts)</option><option value="16:9 widescreen (YouTube)">16:9 Widescreen (YouTube)</option><option value="1:1 square">1:1 Square</option></select></div>
+<div class="actions"><button id="makeVideoPrompt">Create video prompt</button><button class="alt" id="copyVideoPrompt">Copy prompt</button></div>
+<div class="field"><label>Generated AI video prompt & storyboard</label><div class="video-output" id="videoOutput">Your video prompt will appear here.</div></div>
+<p class="note">Note: This tool creates a detailed prompt and storyboard. It does not render an actual video yet. Actual AI video generation needs a connected video-generation service and a secure server-side API key. Never paste secret API keys into this public website.</p>
+<div class="status" id="videoStatus" aria-live="polite"></div>
+</section>
 <footer>Creator Journey · Version 0.2 · Made for creators</footer>
 </div>
 <script>
@@ -110,5 +127,21 @@ thumbPhoto.addEventListener('change',()=>{const file=thumbPhoto.files&&thumbPhot
 document.querySelector('#thumbDownload').addEventListener('click',()=>{drawThumb();const a=document.createElement('a');a.download='creator-journey-thumbnail.png';a.href=thumbCanvas.toDataURL('image/png');a.click();document.querySelector('#thumbStatus').textContent='Thumbnail downloaded!';});
 document.querySelector('#thumbReset').addEventListener('click',()=>{thumbPhoto.value='';thumbTitle.value='MY NEW VIDEO';thumbSub.value='';thumbTheme.value='purple';thumbImage=null;drawThumb();document.querySelector('#thumbStatus').textContent='Reset complete.';});
 drawThumb();
+
+function buildVideoPrompt(){
+ const idea=document.querySelector('#videoIdea').value.trim();
+ const status=document.querySelector('#videoStatus');
+ if(!idea){status.textContent='Pehle apna video idea likho.';return;}
+ const style=document.querySelector('#videoStyle').value;
+ const duration=document.querySelector('#videoDuration').value;
+ const format=document.querySelector('#videoFormat').value;
+ const styles={cinematic:'cinematic film look, dramatic but natural lighting, smooth camera movement, rich detail',anime:'high-quality anime art, expressive motion, carefully composed frames, vibrant atmosphere',realistic:'photorealistic visuals, natural movement, lifelike lighting, realistic textures', '3d':'polished 3D animation, detailed environments, smooth character motion, cinematic lighting',documentary:'documentary visual language, authentic details, steady camera, natural lighting'};
+ const beats=duration==='15 seconds'?['Opening hook (0–3s)','Main visual (3–10s)','Strong closing shot (10–15s)']:duration==='30 seconds'?['Opening hook (0–5s)','Set the scene (5–12s)','Main action (12–23s)','Closing moment (23–30s)']:['Opening hook (0–8s)','Introduce the setting (8–20s)','Develop the main action (20–40s)','Emotional or informative highlight (40–52s)','Memorable closing shot (52–60s)'];
+ const result='VIDEO GENERATION PROMPT\n\nConcept: '+idea+'\nVisual style: '+styles[style]+'\nDuration: '+duration+'\nAspect ratio: '+format+'\n\nSCENE-BY-SCENE STORYBOARD\n'+beats.map((b,i)=>(i+1)+'. '+b+' — Show '+idea+'. Keep the visuals coherent and the action easy to follow.').join('\n')+'\n\nCAMERA & QUALITY\nUse clear subject framing, consistent characters and locations, fluid transitions, readable composition, and high visual quality. Avoid flicker, distorted objects, random text, and abrupt scene changes.\n\nAUDIO\nUse suitable background music and subtle sound effects; no copyrighted song or existing artist imitation.';
+ document.querySelector('#videoOutput').textContent=result;
+ status.textContent='Prompt ready! Copy it into a video-generation service.';
+}
+document.querySelector('#makeVideoPrompt').addEventListener('click',buildVideoPrompt);
+document.querySelector('#copyVideoPrompt').addEventListener('click',async()=>{const t=document.querySelector('#videoOutput').textContent;if(t==='Your video prompt will appear here.'){document.querySelector('#videoStatus').textContent='Pehle prompt create karo.';return;}try{await navigator.clipboard.writeText(t);document.querySelector('#videoStatus').textContent='Prompt copied!';}catch(e){document.querySelector('#videoStatus').textContent='Prompt select karke copy kar lo.';}});
 </script>
 </body></html>
