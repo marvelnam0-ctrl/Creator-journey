@@ -1,0 +1,21 @@
+{
+  "id": "./inter-science-2027.html",
+  "name": "UP Board Inter Science Master 2027",
+  "short_name": "Science Master 2027",
+  "description": "UP Board Class 12 PCB and Hindi exam preparation, practice tests and revision.",
+  "lang": "hi",
+  "start_url": "./inter-science-2027.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1224",
+  "theme_color": "#101b36",
+  "icons": [
+    {
+      "src": "./inter-science-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
