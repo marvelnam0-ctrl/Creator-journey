@@ -119,7 +119,53 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="field"><label>Your plan</label><div class="out" id="planList">No plans yet.</div></div>
 <div class="status" id="planStatus" aria-live="polite"></div>
 </section>
-\n<footer>Creator Journey · Version 0.3 · Made for creators</footer>
+\n
+<section class="card">
+<h2>💡 5 Creator Growth Tools</h2>
+<p class="muted">Paanch quick tools jo video planning aur publishing ko easy banate hain.</p>
+<div class="field"><label for="ideaTopic">1. Video topic / keyword</label><input id="ideaTopic" maxlength="90" placeholder="e.g. mobile photo editing"></div>
+<div class="actions"><button id="titleIdeasBtn">Generate title ideas</button><button class="alt" id="hookIdeasBtn">Generate hooks</button></div>
+<div class="field"><label>Title ideas</label><div class="out" id="titleIdeasOut">Your title ideas will appear here.</div></div>
+<div class="field"><label>Opening hook ideas</label><div class="out" id="hookIdeasOut">Your hooks will appear here.</div></div>
+<div class="actions"><button class="alt" id="copyIdeasBtn">Copy title + hooks</button></div>
+<div class="status" id="ideasStatus" aria-live="polite"></div>
+</section>
+<section class="card">
+<h2>📝 Video Script Outline</h2>
+<p class="muted">Topic se ek simple beginning, middle aur ending wala script outline banao.</p>
+<div class="field"><label for="scriptTopic">Video topic</label><input id="scriptTopic" maxlength="100" placeholder="What is your video about?"></div>
+<div class="field"><label for="scriptAudience">Audience</label><input id="scriptAudience" maxlength="80" placeholder="e.g. beginner creators"></div>
+<button id="makeScriptBtn">Create script outline</button>
+<div class="field"><label>Script outline</label><div class="out" id="scriptOut">Your script outline will appear here.</div></div>
+<div class="actions"><button class="alt" id="copyScriptBtn">Copy script</button></div>
+<div class="status" id="scriptStatus" aria-live="polite"></div>
+</section>
+<section class="card">
+<h2>📄 Video Description Builder</h2>
+<p class="muted">YouTube ya doosre platforms ke liye description ka draft taiyar karo.</p>
+<div class="field"><label for="descTitle">Video title</label><input id="descTitle" maxlength="100" placeholder="Your video title"></div>
+<div class="field"><label for="descSummary">Video mein kya hai?</label><textarea id="descSummary" maxlength="400" placeholder="2-3 lines mein video explain karo"></textarea></div>
+<div class="field"><label for="descCta">Call to action</label><select id="descCta"><option value="Agar video helpful laga, toh like aur subscribe karein.">Like & subscribe</option><option value="Apna feedback comments mein share karein.">Ask for comments</option><option value="Is video ko kisi dost ke saath share karein.">Ask to share</option></select></div>
+<button id="makeDescBtn">Create description</button>
+<div class="field"><label>Description draft</label><div class="out" id="descOut">Your description will appear here.</div></div>
+<div class="actions"><button class="alt" id="copyDescBtn">Copy description</button></div>
+<div class="status" id="descStatus" aria-live="polite"></div>
+</section>
+<section class="card">
+<h2>✅ Publishing Checklist</h2>
+<p class="muted">Publish karne se pehle apne video ko check karo. Tick browser mein save nahi hote.</p>
+<div id="publishChecks" class="field">
+<label><input type="checkbox"> Title clear aur accurate hai</label>
+<label><input type="checkbox"> Thumbnail readable hai</label>
+<label><input type="checkbox"> Video ka audio aur visuals check kiye</label>
+<label><input type="checkbox"> Description aur links verify kiye</label>
+<label><input type="checkbox"> Music, images aur clips ke usage rights check kiye</label>
+<label><input type="checkbox"> Audience aur privacy settings check ki</label>
+</div>
+<button class="alt" id="resetChecksBtn">Reset checklist</button>
+<div class="status" id="checkStatus" aria-live="polite"></div>
+</section>
+\n<footer>Creator Journey · Version 0.4 · Made for creators</footer>
 </div>
 <script>
 const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
@@ -183,5 +229,19 @@ function renderPlans(){const box=document.querySelector('#planList');box.replace
 function savePlans(){try{localStorage.setItem(PLAN_KEY,JSON.stringify(plans));document.querySelector('#planStatus').textContent='Planner saved on this device.';}catch(e){document.querySelector('#planStatus').textContent='Browser storage unavailable. Try another browser setting.';}renderPlans();}
 document.querySelector('#addPlan').addEventListener('click',()=>{const date=document.querySelector('#planDate').value,platform=document.querySelector('#planPlatform').value,idea=document.querySelector('#planIdea').value.trim();if(!date||!idea){document.querySelector('#planStatus').textContent='Date aur idea dono bharna zaroori hai.';return;}plans.push({date,platform,idea});document.querySelector('#planIdea').value='';savePlans();});
 renderPlans();
+\n
+function getCreatorTopic(id){return document.getElementById(id).value.trim();}
+function makeTitleIdeas(){const t=getCreatorTopic('ideaTopic');if(!t){document.querySelector('#ideasStatus').textContent='Pehle topic likho.';return;}const safe=t.replace(/[<>]/g,'');document.querySelector('#titleIdeasOut').textContent=['Beginners ke liye '+safe+': Simple Guide','Maine '+safe+' try kiya — ye seekha',''+safe+' ke 5 useful tips',''+safe+' karte waqt ye mistakes avoid karo',''+safe+': Step-by-step explained'].join('\n');document.querySelector('#ideasStatus').textContent='Title ideas ready — apne video ke hisaab se edit karo.';}
+function makeHookIdeas(){const t=getCreatorTopic('ideaTopic');if(!t){document.querySelector('#ideasStatus').textContent='Pehle topic likho.';return;}document.querySelector('#hookIdeasOut').textContent=['Agar aap '+t+' seekhna chahte hain, toh ye video aapke liye hai.','Aaj hum '+t+' ko simple steps mein samjhenge.','Shuru karne se pehle '+t+' ki ye 3 baatein jaan lo.','Kya aap '+t+' mein beginner hain? Yahan se start karein.'];document.querySelector('#ideasStatus').textContent='Hook ideas ready!';}
+document.querySelector('#titleIdeasBtn').addEventListener('click',makeTitleIdeas);
+document.querySelector('#hookIdeasBtn').addEventListener('click',makeHookIdeas);
+document.querySelector('#copyIdeasBtn').addEventListener('click',async()=>{const t='TITLE IDEAS\n'+document.querySelector('#titleIdeasOut').textContent+'\n\nHOOK IDEAS\n'+document.querySelector('#hookIdeasOut').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#ideasStatus').textContent='Copied!';}catch(e){document.querySelector('#ideasStatus').textContent='Text select karke copy kar lo.';}});
+function makeScriptOutline(){const topic=getCreatorTopic('scriptTopic'),aud=getCreatorTopic('scriptAudience')||'viewers';if(!topic){document.querySelector('#scriptStatus').textContent='Video topic likho.';return;}document.querySelector('#scriptOut').textContent='VIDEO SCRIPT OUTLINE\n\n1. OPENING (0–10 sec)\n“Hello! Aaj hum baat karenge '+topic+'. Is video mein aapko simple useful points milenge.”\n\n2. INTRODUCTION\nExplain why '+topic+' matters to '+aud+'.\n\n3. MAIN CONTENT\n• Point 1: Basic concept\n• Point 2: Step-by-step example\n• Point 3: Common mistake and how to avoid it\n\n4. WRAP-UP\nRecap the key learning in 1–2 sentences.\n\n5. ENDING\n“Thanks for watching. Aapka next question comments mein likhein.”';document.querySelector('#scriptStatus').textContent='Outline ready. Apne experience aur facts se personalize karo.';}
+document.querySelector('#makeScriptBtn').addEventListener('click',makeScriptOutline);
+document.querySelector('#copyScriptBtn').addEventListener('click',async()=>{const t=document.querySelector('#scriptOut').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#scriptStatus').textContent='Script copied!';}catch(e){document.querySelector('#scriptStatus').textContent='Text select karke copy kar lo.';}});
+function makeDescription(){const title=getCreatorTopic('descTitle'),summary=getCreatorTopic('descSummary');if(!title||!summary){document.querySelector('#descStatus').textContent='Title aur video summary dono likho.';return;}const cta=document.querySelector('#descCta').value;document.querySelector('#descOut').textContent=title+'\n\n'+summary+'\n\n'+cta+'\n\n#CreatorJourney #ContentCreator';document.querySelector('#descStatus').textContent='Description draft ready!';}
+document.querySelector('#makeDescBtn').addEventListener('click',makeDescription);
+document.querySelector('#copyDescBtn').addEventListener('click',async()=>{const t=document.querySelector('#descOut').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#descStatus').textContent='Description copied!';}catch(e){document.querySelector('#descStatus').textContent='Text select karke copy kar lo.';}});
+document.querySelector('#resetChecksBtn').addEventListener('click',()=>{document.querySelectorAll('#publishChecks input[type=checkbox]').forEach(x=>x.checked=false);document.querySelector('#checkStatus').textContent='Checklist reset.';});
 \n</script>
 </body></html>
