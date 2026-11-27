@@ -105,11 +105,18 @@ body.detail-view #dashboardBack{display:inline-flex}
 </div>
 <div class="actions"><button id="enhanceDownload">Download Enhanced Photo</button><button class="alt" id="enhanceReset">Reset</button></div>
 <div class="status" id="enhanceStatus" aria-live="polite"></div>
-<div class="tools" style="margin-top:14px">
-<div class="tool"><b>🖼️ 4K Export</b><span>Image ko 3840px wide export size tak upscale karein. Upscaling adds pixels, but cannot recreate true AI detail.</span><button class="alt" id="export4k" style="margin-top:10px;width:100%">Export 4K size</button></div>
-<div class="tool"><b>🌄 Background Remover</b><span>Automatic background removal needs an AI service. It is not connected in this version.</span><button class="alt" id="bgRemoveInfo" style="margin-top:10px;width:100%">Check availability</button></div>
+<div class="actions">
+<button class="alt" id="rotateLeft">↶ Rotate left</button><button class="alt" id="rotateRight">↷ Rotate right</button><button class="alt" id="flipPhoto">↔ Flip photo</button>
 </div>
-<p class="note">Glow Up, brightness, contrast aur saturation filters yahin locally apply hote hain. 4K export is a size upscale, not true AI 4K restoration. Background removal will be added after a safe AI service is connected; no API key should be placed in this public page.</p>
+<div class="tool" style="margin-top:14px">
+<b>🌄 Background color remover</b>
+<span>Plain ya single-color background ko manually remove karne ke liye photo par us background ko tap karein. Best results: plain wall, sky ya solid backdrop.</span>
+<div class="actions"><button class="alt" id="pickBgColor">Pick background color</button><button class="alt" id="clearBgColor">Clear selection</button></div>
+<div class="field"><label for="bgTolerance">Removal strength <span id="bgToleranceValue">35</span></label><input id="bgTolerance" type="range" min="5" max="120" value="35"></div>
+<div class="status" id="bgStatus" aria-live="polite">Pehle photo upload karein, phir Pick background color dabayein.</div>
+</div>
+<div class="tool" style="margin-top:14px"><b>🖼️ 4K-size export</b><span>Long edge ko 3840 pixels tak upscale karta hai. Ye AI detail restoration nahi hai.</span><button class="alt" id="export4k" style="margin-top:10px;width:100%">Export 4K size</button></div>
+<p class="note">Brightness, contrast, saturation, presets, rotate, flip aur single-color background removal browser mein locally kaam karte hain. Background remover AI cutout nahi hai; complex hair, shadows aur mixed backgrounds ke liye dedicated AI service chahiye. Photo is tool se server par upload nahi hoti.</p>
 </section>
 
 <section class="card" id="photoTool">
@@ -259,32 +266,47 @@ const photo=document.querySelector('#photo'),preview=document.querySelector('#pr
 photo.addEventListener('change',()=>{const f=photo.files?.[0];if(!f)return;if(!f.type.startsWith('image/')){preview.textContent='Image file chuno.';return;}if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=URL.createObjectURL(f);const im=document.createElement('img');im.src=photoUrl;im.alt='Selected photo preview';preview.replaceChildren(im);});
 
 const enhanceInput=document.querySelector('#enhancePhoto'),enhancePreview=document.querySelector('#enhancePreview');
-const enhanceCanvas=document.createElement('canvas'),enhanceCtx=enhanceCanvas.getContext('2d');
-let enhanceImage=null,enhanceUrl='';
-const brightness=document.querySelector('#enhanceBrightness'),contrast=document.querySelector('#enhanceContrast'),saturation=document.querySelector('#enhanceSaturation'),preset=document.querySelector('#enhancePreset');
+const enhanceCanvas=document.createElement('canvas'),enhanceCtx=enhanceCanvas.getContext('2d',{willReadFrequently:true});
+let enhanceImage=null,enhanceUrl='',photoRotation=0,photoFlipped=false,bgSample=null,bgPickMode=false;
+const brightness=document.querySelector('#enhanceBrightness'),contrast=document.querySelector('#enhanceContrast'),saturation=document.querySelector('#enhanceSaturation'),preset=document.querySelector('#enhancePreset'),bgTolerance=document.querySelector('#bgTolerance');
 function drawEnhanced(){
  if(!enhanceImage)return;
- const w=enhanceImage.naturalWidth,h=enhanceImage.naturalHeight;
+ const iw=enhanceImage.naturalWidth,ih=enhanceImage.naturalHeight,sideways=Math.abs(photoRotation%180)===90;
+ const w=sideways?ih:iw,h=sideways?iw:ih;
  enhanceCanvas.width=w;enhanceCanvas.height=h;
  let b=Number(brightness.value),c=Number(contrast.value),s=Number(saturation.value);
  if(preset.value==='glow'){b=Math.min(160,b+12);c=Math.min(160,c+12);s=Math.min(200,s+28);}
  if(preset.value==='vivid'){c=Math.min(160,c+18);s=Math.min(200,s+45);}
  if(preset.value==='soft'){b=Math.min(160,b+5);c=Math.max(50,c-12);s=Math.max(0,s-12);}
  if(preset.value==='mono')s=0;
- enhanceCtx.filter='brightness('+b+'%) contrast('+c+'%) saturate('+s+'%)';
- enhanceCtx.drawImage(enhanceImage,0,0,w,h);enhanceCtx.filter='none';
- const img=document.createElement('img');img.alt='Enhanced photo preview';img.src=enhanceCanvas.toDataURL('image/jpeg',.9);enhancePreview.replaceChildren(img);
+ enhanceCtx.save();enhanceCtx.filter='brightness('+b+'%) contrast('+c+'%) saturate('+s+'%)';
+ enhanceCtx.translate(w/2,h/2);enhanceCtx.rotate(photoRotation*Math.PI/180);enhanceCtx.scale(photoFlipped?-1:1,1);
+ enhanceCtx.drawImage(enhanceImage,-iw/2,-ih/2,iw,ih);enhanceCtx.restore();enhanceCtx.filter='none';
+ if(bgSample){
+  const imageData=enhanceCtx.getImageData(0,0,w,h),data=imageData.data,tol=Number(bgTolerance.value),softEdge=Math.max(8,tol*.35);
+  for(let i=0;i<data.length;i+=4){const dr=data[i]-bgSample.r,dg=data[i+1]-bgSample.g,db=data[i+2]-bgSample.b,dist=Math.sqrt(dr*dr+dg*dg+db*db);if(dist<tol)data[i+3]=0;else if(dist<tol+softEdge)data[i+3]=Math.round(data[i+3]*(dist-tol)/softEdge);}
+  enhanceCtx.putImageData(imageData,0,0);
+ }
+ enhanceCanvas.style.width='100%';enhanceCanvas.style.height='auto';enhanceCanvas.style.maxHeight='520px';enhanceCanvas.style.objectFit='contain';enhanceCanvas.style.cursor=bgPickMode?'crosshair':'default';
+ enhancePreview.replaceChildren(enhanceCanvas);
  document.querySelector('#brightnessValue').textContent=brightness.value+'%';
  document.querySelector('#contrastValue').textContent=contrast.value+'%';
  document.querySelector('#saturationValue').textContent=saturation.value+'%';
+ document.querySelector('#bgToleranceValue').textContent=bgTolerance.value;
 }
-enhanceInput.addEventListener('change',()=>{const f=enhanceInput.files&&enhanceInput.files[0];if(!f)return;if(!f.type.startsWith('image/')){document.querySelector('#enhanceStatus').textContent='Please select an image.';return;}if(enhanceUrl)URL.revokeObjectURL(enhanceUrl);enhanceUrl=URL.createObjectURL(f);enhanceImage=new Image();enhanceImage.onload=()=>{drawEnhanced();document.querySelector('#enhanceStatus').textContent='Photo ready to enhance.';};enhanceImage.src=enhanceUrl;});
-[brightness,contrast,saturation,preset].forEach(el=>el.addEventListener('input',drawEnhanced));
-document.querySelector('#enhanceReset').addEventListener('click',()=>{brightness.value=100;contrast.value=100;saturation.value=100;preset.value='none';drawEnhanced();document.querySelector('#enhanceStatus').textContent='Settings reset.';});
-function downloadEnhanced(width){if(!enhanceImage){document.querySelector('#enhanceStatus').textContent='Pehle photo choose karo.';return;}const sourceW=enhanceCanvas.width,sourceH=enhanceCanvas.height;const targetW=width||sourceW,targetH=Math.round(sourceH*targetW/sourceW);const out=document.createElement('canvas');out.width=targetW;out.height=targetH;const ctx=out.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(enhanceCanvas,0,0,targetW,targetH);const a=document.createElement('a');a.download=width?'creator-journey-4k-upscale.png':'creator-journey-enhanced.png';a.href=out.toDataURL('image/png');a.click();document.querySelector('#enhanceStatus').textContent=width?'4K-size upscale downloaded.':'Enhanced photo downloaded.';}
+enhanceInput.addEventListener('change',()=>{const f=enhanceInput.files&&enhanceInput.files[0];if(!f)return;if(!f.type.startsWith('image/')){document.querySelector('#enhanceStatus').textContent='Please select an image.';return;}if(enhanceUrl)URL.revokeObjectURL(enhanceUrl);enhanceUrl=URL.createObjectURL(f);enhanceImage=new Image();enhanceImage.onload=()=>{photoRotation=0;photoFlipped=false;bgSample=null;bgPickMode=false;drawEnhanced();document.querySelector('#enhanceStatus').textContent='Photo ready to enhance.';document.querySelector('#bgStatus').textContent='Pick background color dabakar photo ke background par tap karein.';};enhanceImage.src=enhanceUrl;});
+[brightness,contrast,saturation,preset,bgTolerance].forEach(el=>el.addEventListener('input',drawEnhanced));
+document.querySelector('#rotateLeft').addEventListener('click',()=>{photoRotation=(photoRotation+270)%360;drawEnhanced();});
+document.querySelector('#rotateRight').addEventListener('click',()=>{photoRotation=(photoRotation+90)%360;drawEnhanced();});
+document.querySelector('#flipPhoto').addEventListener('click',()=>{photoFlipped=!photoFlipped;drawEnhanced();});
+document.querySelector('#pickBgColor').addEventListener('click',()=>{if(!enhanceImage){document.querySelector('#bgStatus').textContent='Pehle photo upload karein.';return;}bgPickMode=true;drawEnhanced();document.querySelector('#bgStatus').textContent='Ab photo mein background ke kisi hisse par tap karein.';});
+document.querySelector('#clearBgColor').addEventListener('click',()=>{bgSample=null;bgPickMode=false;drawEnhanced();document.querySelector('#bgStatus').textContent='Background selection clear ho gayi.';});
+bgTolerance.addEventListener('input',()=>{document.querySelector('#bgToleranceValue').textContent=bgTolerance.value;});
+enhanceCanvas.addEventListener('click',event=>{if(!bgPickMode||!enhanceImage)return;const rect=enhanceCanvas.getBoundingClientRect(),x=Math.max(0,Math.min(enhanceCanvas.width-1,Math.floor((event.clientX-rect.left)*enhanceCanvas.width/rect.width))),y=Math.max(0,Math.min(enhanceCanvas.height-1,Math.floor((event.clientY-rect.top)*enhanceCanvas.height/rect.height)));const px=enhanceCtx.getImageData(x,y,1,1).data;bgSample={r:px[0],g:px[1],b:px[2]};bgPickMode=false;drawEnhanced();document.querySelector('#bgStatus').textContent='Background color remove kar diya. Strength slider se adjust karein.';});
+document.querySelector('#enhanceReset').addEventListener('click',()=>{brightness.value=100;contrast.value=100;saturation.value=100;preset.value='none';photoRotation=0;photoFlipped=false;bgSample=null;bgPickMode=false;bgTolerance.value=35;drawEnhanced();document.querySelector('#enhanceStatus').textContent='All photo settings reset.';document.querySelector('#bgStatus').textContent='Background selection cleared.';});
+function downloadEnhanced(longEdge){if(!enhanceImage){document.querySelector('#enhanceStatus').textContent='Pehle photo choose karo.';return;}const sourceW=enhanceCanvas.width,sourceH=enhanceCanvas.height,scale=longEdge?longEdge/Math.max(sourceW,sourceH):1,targetW=Math.max(1,Math.round(sourceW*scale)),targetH=Math.max(1,Math.round(sourceH*scale));const out=document.createElement('canvas');out.width=targetW;out.height=targetH;const ctx=out.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(enhanceCanvas,0,0,targetW,targetH);const a=document.createElement('a');a.download=longEdge?'creator-journey-4k-size.png':'creator-journey-enhanced.png';a.href=out.toDataURL('image/png');a.click();document.querySelector('#enhanceStatus').textContent=longEdge?'4K-size export downloaded.':'Enhanced PNG downloaded.';}
 document.querySelector('#enhanceDownload').addEventListener('click',()=>downloadEnhanced(0));
 document.querySelector('#export4k').addEventListener('click',()=>downloadEnhanced(3840));
-document.querySelector('#bgRemoveInfo').addEventListener('click',()=>{document.querySelector('#enhanceStatus').textContent='Background removal requires an AI service connection. It is not active yet.';});
 
 function generate(){const topic=document.querySelector('#topic').value.trim()||'meri nayi post';const tone=document.querySelector('#tone').value;const captions={friendly:`Ek chhota sa khoobsurat moment: ${topic}. Aapko kaisa laga?`,motivation:`Har din ek nayi shuruaat hai. Aaj ka focus: ${topic}. Keep creating!`,professional:`Sharing something about ${topic}. Thank you for being part of this journey.`,fun:`Aaj ka mood: ${topic} ✨ Comment mein apni baat batao!`};const words=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,3);const hashtags=['#CreatorJourney','#ContentCreator','#NewPost',...words.map(w=>'#'+w)];document.querySelector('#caption').textContent=captions[tone];document.querySelector('#tags').textContent=[...new Set(hashtags)].join(' ');document.querySelector('#status').textContent='Ideas ready! Post karne se pehle edit kar lena.';}
 document.querySelector('#make').addEventListener('click',generate);
