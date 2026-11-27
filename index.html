@@ -21,6 +21,11 @@ button{border:0;border-radius:11px;padding:12px 15px;background:var(--accent);co
 .note{font-size:12px;color:#aaa9c7;line-height:1.5;margin-top:12px}.status{font-size:12px;color:#bdb4ff;min-height:18px}
 footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 @media(max-width:620px){.grid{grid-template-columns:1fr}.wrap{padding:16px}}
+
+.thumb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.thumb-preview{width:100%;aspect-ratio:16/9;background:#101024;border:1px solid #414064;border-radius:13px;overflow:hidden}
+.thumb-preview canvas{width:100%;height:100%;display:block}
+@media(max-width:620px){.thumb-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -52,6 +57,23 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <p class="note">Abhi ye starter version hai. Advanced AI, video export aur social posting baad ke versions mein add honge.</p>
 </section>
 </div>
+
+<section class="card">
+<h2>🎨 YouTube Thumbnail Maker</h2>
+<p class="muted">Apni photo aur title se 16:9 thumbnail banao. Design tumhare phone par hi taiyar hota hai.</p>
+<div class="thumb-grid">
+<div>
+<div class="field"><label for="thumbPhoto">Background photo</label><input id="thumbPhoto" type="file" accept="image/*"></div>
+<div class="field"><label for="thumbTitle">Thumbnail title</label><input id="thumbTitle" maxlength="48" value="MY NEW VIDEO"></div>
+<div class="field"><label for="thumbSub">Chhota subtitle (optional)</label><input id="thumbSub" maxlength="70" placeholder="Watch till the end!"></div>
+<div class="field"><label for="thumbTheme">Design theme</label><select id="thumbTheme"><option value="purple">Purple glow</option><option value="orange">Sunset orange</option><option value="blue">Electric blue</option><option value="green">Fresh green</option></select></div>
+<div class="actions"><button id="thumbDownload">Download PNG</button><button class="alt" id="thumbReset">Reset</button></div>
+<div class="status" id="thumbStatus" aria-live="polite"></div>
+</div>
+<div><label>Live preview · 1280 × 720</label><div class="thumb-preview"><canvas id="thumbCanvas" width="1280" height="720"></canvas></div></div>
+</div>
+<p class="note">Tip: Title chhota aur readable rakho. Photo aur text browser mein hi process hote hain; upload nahi hote.</p>
+</section>
 <footer>Creator Journey · Version 0.2 · Made for creators</footer>
 </div>
 <script>
@@ -61,5 +83,32 @@ function generate(){const topic=document.querySelector('#topic').value.trim()||'
 document.querySelector('#make').addEventListener('click',generate);
 document.querySelector('#copy').addEventListener('click',async()=>{const t=document.querySelector('#caption').textContent+'\n\n'+document.querySelector('#tags').textContent;try{await navigator.clipboard.writeText(t);document.querySelector('#status').textContent='Copied!';}catch(e){document.querySelector('#status').textContent='Text select karke copy kar lo.';}});
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+const thumbCanvas=document.querySelector('#thumbCanvas'),thumbCtx=thumbCanvas.getContext('2d');
+const thumbPhoto=document.querySelector('#thumbPhoto'),thumbTitle=document.querySelector('#thumbTitle'),thumbSub=document.querySelector('#thumbSub'),thumbTheme=document.querySelector('#thumbTheme');
+let thumbImage=null;
+const thumbColors={purple:['#6d28d9','#c084fc'],orange:['#ea580c','#facc15'],blue:['#075985','#38bdf8'],green:['#166534','#86efac']};
+function drawThumb(){
+ const w=1280,h=720,ctx=thumbCtx,colors=thumbColors[thumbTheme.value];
+ ctx.clearRect(0,0,w,h);
+ if(thumbImage){const scale=Math.max(w/thumbImage.width,h/thumbImage.height),iw=thumbImage.width*scale,ih=thumbImage.height*scale;ctx.drawImage(thumbImage,(w-iw)/2,(h-ih)/2,iw,ih);}
+ else {const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,colors[0]);g.addColorStop(1,'#111027');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
+ const shade=ctx.createLinearGradient(0,0,w,0);shade.addColorStop(0,'rgba(0,0,0,.82)');shade.addColorStop(.62,'rgba(0,0,0,.28)');shade.addColorStop(1,'rgba(0,0,0,.08)');ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle=colors[1];ctx.fillRect(70,90,14,530);
+ const title=thumbTitle.value.trim()||'MY NEW VIDEO';let size=112;ctx.font='900 '+size+'px system-ui, sans-serif';
+ while(ctx.measureText(title).width>1020&&size>48){size-=4;ctx.font='900 '+size+'px system-ui, sans-serif';}
+ ctx.textAlign='left';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.lineWidth=12;ctx.strokeStyle='rgba(0,0,0,.65)';ctx.fillStyle='#fff';
+ const words=title.toUpperCase().split(' ');let lines=[],line='';
+ for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>1020&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);
+ const lineHeight=size*1.08;const total=lines.length*lineHeight;let y=360-total/2;
+ lines.slice(0,3).forEach(t=>{ctx.strokeText(t,112,y);ctx.fillText(t,112,y);y+=lineHeight;});
+ if(thumbSub.value.trim()){ctx.font='700 38px system-ui, sans-serif';ctx.fillStyle=colors[1];ctx.fillText(thumbSub.value.trim().slice(0,70),114,610);}
+ ctx.fillStyle='rgba(255,255,255,.88)';ctx.font='700 22px system-ui,sans-serif';ctx.fillText('CREATOR JOURNEY',112,665);
+}
+[thumbTitle,thumbSub,thumbTheme].forEach(el=>el.addEventListener('input',drawThumb));
+thumbPhoto.addEventListener('change',()=>{const file=thumbPhoto.files&&thumbPhoto.files[0];if(!file)return;if(!file.type.startsWith('image/')){document.querySelector('#thumbStatus').textContent='Please choose an image.';return;}const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{thumbImage=im;drawThumb();document.querySelector('#thumbStatus').textContent='Photo added!';};im.src=reader.result;};reader.readAsDataURL(file);});
+document.querySelector('#thumbDownload').addEventListener('click',()=>{drawThumb();const a=document.createElement('a');a.download='creator-journey-thumbnail.png';a.href=thumbCanvas.toDataURL('image/png');a.click();document.querySelector('#thumbStatus').textContent='Thumbnail downloaded!';});
+document.querySelector('#thumbReset').addEventListener('click',()=>{thumbPhoto.value='';thumbTitle.value='MY NEW VIDEO';thumbSub.value='';thumbTheme.value='purple';thumbImage=null;drawThumb();document.querySelector('#thumbStatus').textContent='Reset complete.';});
+drawThumb();
 </script>
 </body></html>
