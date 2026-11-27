@@ -91,7 +91,35 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <p class="note">Note: This tool creates a detailed prompt and storyboard. It does not render an actual video yet. Actual AI video generation needs a connected video-generation service and a secure server-side API key. Never paste secret API keys into this public website.</p>
 <div class="status" id="videoStatus" aria-live="polite"></div>
 </section>
-<footer>Creator Journey · Version 0.2 · Made for creators</footer>
+
+<section class="card">
+<h2>🔗 Creator Bio Link Builder</h2>
+<p class="muted">Apne social links ko ek clean profile mein arrange karo.</p>
+<div class="field"><label for="bioName">Creator name</label><input id="bioName" maxlength="40" placeholder="Your creator name"></div>
+<div class="field"><label for="bioAbout">Short bio</label><textarea id="bioAbout" maxlength="140" placeholder="What do you create?"></textarea></div>
+<div class="grid">
+<div class="field"><label for="bioYoutube">YouTube URL</label><input id="bioYoutube" type="url" placeholder="https://youtube.com/..."></div>
+<div class="field"><label for="bioInstagram">Instagram URL</label><input id="bioInstagram" type="url" placeholder="https://instagram.com/..."></div>
+</div>
+<div class="field"><label for="bioOther">One more link (optional)</label><input id="bioOther" type="url" placeholder="https://..."></div>
+<div class="actions"><button id="makeBio">Create bio card</button><button class="alt" id="copyBio">Copy bio text</button></div>
+<div class="field"><label>Preview</label><div class="out" id="bioPreview">Your creator bio will appear here.</div></div>
+<div class="status" id="bioStatus" aria-live="polite"></div>
+<p class="note">This creates shareable bio text, not a hosted public profile page. Check your links before sharing.</p>
+</section>
+<section class="card">
+<h2>🗓️ Content Planner</h2>
+<p class="muted">Apne agle posts ke ideas aur planned dates save karo. Data isi browser mein rahega.</p>
+<div class="grid">
+<div class="field"><label for="planDate">Publish date</label><input id="planDate" type="date"></div>
+<div class="field"><label for="planPlatform">Platform</label><select id="planPlatform"><option>YouTube</option><option>Instagram</option><option>Facebook</option><option>Other</option></select></div>
+</div>
+<div class="field"><label for="planIdea">Post / video idea</label><input id="planIdea" maxlength="100" placeholder="e.g. 3 editing tips"></div>
+<button id="addPlan">Add to planner</button>
+<div class="field"><label>Your plan</label><div class="out" id="planList">No plans yet.</div></div>
+<div class="status" id="planStatus" aria-live="polite"></div>
+</section>
+\n<footer>Creator Journey · Version 0.3 · Made for creators</footer>
 </div>
 <script>
 const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
@@ -143,5 +171,17 @@ function buildVideoPrompt(){
 }
 document.querySelector('#makeVideoPrompt').addEventListener('click',buildVideoPrompt);
 document.querySelector('#copyVideoPrompt').addEventListener('click',async()=>{const t=document.querySelector('#videoOutput').textContent;if(t==='Your video prompt will appear here.'){document.querySelector('#videoStatus').textContent='Pehle prompt create karo.';return;}try{await navigator.clipboard.writeText(t);document.querySelector('#videoStatus').textContent='Prompt copied!';}catch(e){document.querySelector('#videoStatus').textContent='Prompt select karke copy kar lo.';}});
-</script>
+
+const bioFields=['bioName','bioAbout','bioYoutube','bioInstagram','bioOther'];
+function validLink(v){if(!v)return true;try{const u=new URL(v);return u.protocol==='https:'||u.protocol==='http:';}catch(e){return false;}}
+function makeBio(){const vals=bioFields.map(id=>document.getElementById(id).value.trim());if(!vals[0]){document.querySelector('#bioStatus').textContent='Creator name likho.';return;}if(vals.slice(2).some(v=>!validLink(v))){document.querySelector('#bioStatus').textContent='Links mein valid https:// URL use karo.';return;}const lines=[vals[0],vals[1],...vals.slice(2).filter(Boolean)];document.querySelector('#bioPreview').textContent=lines.join('\n');document.querySelector('#bioStatus').textContent='Bio card text ready!';}
+document.querySelector('#makeBio').addEventListener('click',makeBio);
+document.querySelector('#copyBio').addEventListener('click',async()=>{const t=document.querySelector('#bioPreview').textContent;if(t==='Your creator bio will appear here.'){document.querySelector('#bioStatus').textContent='Pehle bio card banao.';return;}try{await navigator.clipboard.writeText(t);document.querySelector('#bioStatus').textContent='Bio copied!';}catch(e){document.querySelector('#bioStatus').textContent='Text select karke copy kar lo.';}});
+const PLAN_KEY='creatorJourneyPlansV1';
+let plans=[];try{plans=JSON.parse(localStorage.getItem(PLAN_KEY)||'[]');if(!Array.isArray(plans))plans=[];}catch(e){plans=[];}
+function renderPlans(){const box=document.querySelector('#planList');box.replaceChildren();if(!plans.length){box.textContent='No plans yet.';return;}plans.sort((a,b)=>a.date.localeCompare(b.date));plans.forEach((p,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #302e50';const info=document.createElement('span');info.textContent=p.date+' · '+p.platform+' — '+p.idea;const del=document.createElement('button');del.className='alt';del.textContent='Delete';del.addEventListener('click',()=>{plans.splice(i,1);savePlans();});row.append(info,del);box.append(row);});}
+function savePlans(){try{localStorage.setItem(PLAN_KEY,JSON.stringify(plans));document.querySelector('#planStatus').textContent='Planner saved on this device.';}catch(e){document.querySelector('#planStatus').textContent='Browser storage unavailable. Try another browser setting.';}renderPlans();}
+document.querySelector('#addPlan').addEventListener('click',()=>{const date=document.querySelector('#planDate').value,platform=document.querySelector('#planPlatform').value,idea=document.querySelector('#planIdea').value.trim();if(!date||!idea){document.querySelector('#planStatus').textContent='Date aur idea dono bharna zaroori hai.';return;}plans.push({date,platform,idea});document.querySelector('#planIdea').value='';savePlans();});
+renderPlans();
+\n</script>
 </body></html>
