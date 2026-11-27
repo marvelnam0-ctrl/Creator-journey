@@ -320,7 +320,7 @@ function startCustomMock(){const total=bank.physics.length+bank.chemistry.length
 function renderTestReport(){
  const host=document.getElementById('testReportContent'),h=JSON.parse(localStorage.getItem('upInterTestHistory')||'[]');
  if(!h.length){host.innerHTML='<h3>अभी कोई टेस्ट रिकॉर्ड नहीं है</h3><p>पहले कोई अभ्यास टेस्ट दें।</p>';return;}
- const names={physics:'Physics',chemistry:'Chemistry',biology:'Biology',mixed:'Mixed Mock'},totals={};
+ const names={physics:'Physics',chemistry:'Chemistry',biology:'Biology',mixed:'Mixed Mock',hindi:'सामान्य हिंदी'},totals={};
  h.forEach(x=>{totals[x.mode]??={score:0,total:0,count:0};totals[x.mode].score+=x.score;totals[x.mode].total+=x.total;totals[x.mode].count++;});
  host.innerHTML='<h3>आपकी टेस्ट प्रगति</h3>'+Object.keys(totals).map(k=>'<p><b>'+names[k]+'</b> — '+totals[k].count+' टेस्ट • '+totals[k].score+'/'+totals[k].total+' अंक ('+Math.round(100*totals[k].score/totals[k].total)+'%)</p>').join('')+'<h3>हाल के टेस्ट</h3>'+h.slice(-10).reverse().map(x=>'<p>'+names[x.mode]+' • '+x.date+' • '+x.score+'/'+x.total+' • गलत/छोड़े: '+x.wrong+'</p>').join('')+'<button class="secondary" onclick="clearTestHistory()">रिपोर्ट इतिहास मिटाएँ</button>';
 }
