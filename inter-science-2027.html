@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b36">
+<title>UP Board Inter Science Master 2027</title>
+<style>
+:root{--bg:#0b1224;--panel:#131f39;--panel2:#1a2948;--line:#2c3d60;--text:#f5f7ff;--muted:#aebbd4;--blue:#71a7ff;--green:#58d6a2;--yellow:#ffd477}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#15264b 0,#0b1224 45%);color:var(--text);font:15px system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;min-height:100vh}.wrap{max-width:920px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.tag{border:1px solid #45618e;color:#c6dcff;border-radius:30px;padding:7px 11px;font-size:12px}.hero{padding:30px 0 18px}h1{font-size:clamp(29px,7vw,46px);line-height:1.12;margin:10px 0}p{color:var(--muted);line-height:1.65}.sub{color:#c4d7ff;font-weight:650}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:17px}.card h3{margin:7px 0}.card p{font-size:13px;margin:5px 0 12px}.icon{font-size:25px}button,a.btn{border:0;border-radius:12px;padding:12px 15px;background:var(--blue);color:#08152d;font-weight:750;font-size:14px;text-decoration:none;display:inline-block;cursor:pointer}.secondary{background:#263958;color:#edf4ff;border:1px solid #40577d}button:disabled{opacity:.5}.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 12px}section{margin:20px 0}.hide{display:none}.notice{background:#2b281b;border:1px solid #64552a;color:#ffe8a8;padding:12px;border-radius:12px;font-size:13px;line-height:1.55}.subject{border-left:4px solid var(--blue)}.question{padding:16px;margin:12px 0;background:var(--panel);border:1px solid var(--line);border-radius:15px}.question h3{font-size:16px;line-height:1.5;margin:0 0 12px}.option{display:block;padding:10px;margin:7px 0;background:#1a2948;border:1px solid #354a70;border-radius:10px;cursor:pointer}.option input{margin-right:8px;accent-color:var(--blue)}.muted{color:var(--muted)}.result{padding:16px;border-radius:14px;background:#142e2c;border:1px solid #286455}.small{font-size:12px;color:var(--muted)}select{background:#1a2948;color:white;border:1px solid #40577d;border-radius:10px;padding:11px;width:100%;margin:8px 0}footer{padding:25px 0;color:var(--muted);font-size:12px}.paper{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}@media(max-width:520px){.wrap{padding:14px}.grid{grid-template-columns:1fr}.hero{padding-top:22px}}
+</style></head>
+<body><main class="wrap">
+<div class="top"><strong>📘 INTER SCIENCE MASTER</strong><span class="tag">कक्षा 12 • PCB • 2027</span></div>
+<div class="hero"><div class="sub">उत्तर प्रदेश माध्यमिक शिक्षा परिषद</div><h1>बोर्ड परीक्षा की तैयारी,<br>अब आसान तरीके से।</h1><p>भौतिक विज्ञान • रसायन विज्ञान • जीव विज्ञान<br>हिंदी में अभ्यास, मॉक टेस्ट और परीक्षा जैसा अनुभव।</p></div>
+<div class="notice">ध्यान दें: नीचे दिए गए अभ्यास प्रश्न नमूना प्रश्न हैं, आधिकारिक पिछले वर्षों के पेपर नहीं। संभावित प्रश्न केवल पाठ्यक्रम और सामान्य परीक्षा-पैटर्न के आधार पर अभ्यास के लिए हैं—परीक्षा में आने की गारंटी नहीं।</div>
+<section id="home"><div class="bar"><h2>आपका डैशबोर्ड</h2><span class="tag">हिंदी माध्यम</span></div>
+<div class="grid">
+<div class="card subject"><div class="icon">⚡</div><h3>भौतिक विज्ञान</h3><p>महत्वपूर्ण अवधारणाएँ और अभ्यास टेस्ट</p><button onclick="start('physics')">अभ्यास करें</button></div>
+<div class="card subject"><div class="icon">🧪</div><h3>रसायन विज्ञान</h3><p>अभिक्रियाएँ, सूत्र और प्रश्न</p><button onclick="start('chemistry')">अभ्यास करें</button></div>
+<div class="card subject"><div class="icon">🧬</div><h3>जीव विज्ञान</h3><p>आनुवंशिकी, मानव शरीर और वनस्पति</p><button onclick="start('biology')">अभ्यास करें</button></div>
+<div class="card"><div class="icon">⏱️</div><h3>मॉक परीक्षा</h3><p>तीनों विषयों के मिले-जुले प्रश्न और टाइमर</p><button onclick="start('mixed')">मॉक टेस्ट दें</button></div>
+<div class="card"><div class="icon">⭐</div><h3>महत्वपूर्ण टॉपिक्स</h3><p>बार-बार पढ़े जाने वाले मुख्य अध्यायों की सूची</p><button class="secondary" onclick="show('topics')">देखें</button></div>
+<div class="card"><div class="icon">📄</div><h3>पिछले वर्ष के पेपर</h3><p>आधिकारिक मॉडल पेपर और पेपर स्रोत</p><button class="secondary" onclick="show('papers')">पेपर देखें</button></div>
+</div></section>
+<section id="topics" class="hide"><div class="bar"><h2>महत्वपूर्ण टॉपिक्स</h2><button class="secondary" onclick="show('home')">वापस</button></div>
+<div class="card"><h3>⚡ भौतिक विज्ञान</h3><p>विद्युत आवेश एवं क्षेत्र • धारा विद्युत • चुंबकीय प्रभाव • विद्युत चुंबकीय प्रेरण • प्रकाशिकी • अर्धचालक</p></div>
+<div class="card"><h3>🧪 रसायन विज्ञान</h3><p>विलयन • वैद्युत रसायन • रासायनिक बलगतिकी • d और f ब्लॉक तत्व • उपसहसंयोजन यौगिक • ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल • ऐमीन</p></div>
+<div class="card"><h3>🧬 जीव विज्ञान</h3><p>जीवों में जनन • मानव जनन • जनन स्वास्थ्य • वंशागति एवं विविधता • आणविक आधार • विकास • मानव स्वास्थ्य एवं रोग • जैव प्रौद्योगिकी • पारिस्थितिकी</p></div>
+<p class="small">यह सामान्य पुनरावृत्ति सूची है। अपनी कक्षा के नवीनतम UPMSP पाठ्यक्रम से अध्यायों का मिलान अवश्य करें।</p></section>
+<section id="papers" class="hide"><div class="bar"><h2>आधिकारिक पेपर स्रोत</h2><button class="secondary" onclick="show('home')">वापस</button></div>
+<div class="card"><h3>UPMSP आधिकारिक वेबसाइट</h3><p>मॉडल पेपर, पाठ्यक्रम और परीक्षा से जुड़ी आधिकारिक सूचनाएँ यहाँ देखें।</p><a class="btn" href="https://upmsp.edu.in/" target="_blank" rel="noopener">UPMSP खोलें ↗</a></div>
+<div class="card"><h3>पेपर डाउनलोड करने का तरीका</h3><p>वेबसाइट पर Model Paper / पाठ्यक्रम सेक्शन खोलें, कक्षा 12 चुनें और अपने विषय का नवीनतम उपलब्ध PDF देखें। पुराने प्रश्नपत्रों के लिए वर्ष और विषय के अनुसार सत्यापित पेपर ही इस्तेमाल करें।</p></div>
+<div class="notice">इस शुरुआती संस्करण में पुराने पेपर PDF अभी जोड़े नहीं गए हैं। गलत या नकली पेपर दिखाने के बजाय आधिकारिक स्रोत दिया गया है।</div></section>
+<section id="test" class="hide"><div class="bar"><div><div class="small" id="testSubject">अभ्यास टेस्ट</div><h2 id="testTitle">प्रश्न</h2></div><span class="tag" id="timer">15:00</span></div><div class="small" id="progress"></div><div id="questions"></div><div class="bar"><button class="secondary" id="prev" onclick="move(-1)">पिछला</button><button id="next" onclick="move(1)">अगला</button></div><button id="submit" onclick="finish()" class="hide">टेस्ट जमा करें</button><div id="result"></div></section>
+<footer>UP Board Inter Science Master 2027 • अभ्यास हेतु शैक्षिक ऐप<br>यह UPMSP का आधिकारिक ऐप नहीं है।</footer>
+</main>
+<script>
+const bank={
+physics:[
+["कूलॉम का नियम किसके बीच बल बताता है?",["दो स्थिर आवेशों के बीच","दो द्रव्यमानों के बीच","दो चुंबकों के ताप के बीच","प्रकाश और ध्वनि के बीच"],0,"दो स्थिर बिंदु आवेशों के बीच विद्युत बल कूलॉम के नियम से मिलता है।"],
+["विद्युत धारा की SI इकाई क्या है?",["वोल्ट","ऐम्पियर","ओम","कूलॉम"],1,"विद्युत धारा की SI इकाई ऐम्पियर है।"],
+["ओम का नियम किस संबंध को दर्शाता है?",["V = IR","P = VI²","F = ma²","Q = It²"],0,"स्थिर ताप पर V = IR।"],
+["प्रकाश का अपवर्तन किस कारण होता है?",["वेग में परिवर्तन","द्रव्यमान में परिवर्तन","आवृत्ति शून्य होना","ताप बढ़ना"],0,"एक माध्यम से दूसरे में जाने पर प्रकाश का वेग बदलता है।"],
+["ट्रांसफॉर्मर किस सिद्धांत पर कार्य करता है?",["विद्युत अपघटन","पारस्परिक प्रेरण","प्रकाश विद्युत प्रभाव","विसरण"],1,"ट्रांसफॉर्मर पारस्परिक विद्युत चुंबकीय प्रेरण पर कार्य करता है।"]],
+chemistry:[
+["विलयन की सांद्रता व्यक्त करने की एक इकाई कौन-सी है?",["मोलरता","वेग","दाबांक","चालकताांक"],0,"मोलरता प्रति लीटर विलयन में विलेय के मोल बताती है।"],
+["प्रथम कोटि अभिक्रिया के वेग स्थिरांक की इकाई क्या है?",["mol L⁻¹ s⁻¹","s⁻¹","L mol⁻¹ s⁻¹","mol² L⁻²"],1,"प्रथम कोटि के लिए k की इकाई समय का व्युत्क्रम होती है।"],
+["d-ब्लॉक तत्वों को सामान्यतः क्या कहा जाता है?",["क्षार धातु","संक्रमण तत्व","अक्रिय गैस","हैलोजन"],1,"d-ब्लॉक के तत्व सामान्यतः संक्रमण तत्व कहलाते हैं।"],
+["CH₃CHO का IUPAC नाम क्या है?",["एथेनॉल","एथेनल","एथेनोइक अम्ल","मेथेनल"],1,"CH₃CHO दो कार्बन वाला ऐल्डिहाइड है—एथेनल।"],
+["ऐमीन में कौन-सा क्रियात्मक समूह होता है?",["–OH","–CHO","–NH₂","–COOH"],2,"प्राथमिक ऐमीन में –NH₂ समूह होता है।"]],
+biology:[
+["मानव में निषेचन सामान्यतः कहाँ होता है?",["गर्भाशय","अंडवाहिनी","अंडाशय","योनि"],1,"मानव में निषेचन सामान्यतः अंडवाहिनी के एम्पुलरी-इस्थमिक क्षेत्र में होता है।"],
+["DNA का पूरा नाम क्या है?",["डाइऑक्सीराइबोन्यूक्लिक अम्ल","राइबोन्यूक्लिक अम्ल","अमीनो अम्ल","एडेनोसिन अम्ल"],0,"DNA का पूरा नाम डिऑक्सीराइबोन्यूक्लिक अम्ल है।"],
+["मेंडल ने अपने प्रयोग किस पौधे पर किए?",["गेहूँ","मटर","मक्का","गुलाब"],1,"मेंडल ने मटर के पौधे पर वंशागति के प्रयोग किए।"],
+["मानव शरीर में इंसुलिन किससे स्रावित होता है?",["थायरॉइड","अग्न्याशय की बीटा कोशिकाएँ","यकृत","अधिवृक्क"],1,"इंसुलिन अग्न्याशय की लैंगरहैंस द्वीपिकाओं की बीटा कोशिकाओं से निकलता है।"],
+["PCR तकनीक का उपयोग किसके प्रवर्धन में होता है?",["DNA","वसा","स्टार्च","प्रोटीन"],0,"PCR द्वारा DNA के विशिष्ट खंड की अनेक प्रतियाँ बनाई जाती हैं।"]]};
+let mode='physics',items=[],idx=0,answers={},remaining=900,clock=null;
+function show(id){['home','topics','papers','test'].forEach(x=>document.getElementById(x).classList.toggle('hide',x!==id));if(clock){clearInterval(clock);clock=null;}}
+function start(m){mode=m;items=m==='mixed'?[...bank.physics.slice(0,3),...bank.chemistry.slice(0,3),...bank.biology.slice(0,4)]:bank[m];idx=0;answers={};remaining=900;document.getElementById('testTitle').textContent=m==='mixed'?'मिश्रित मॉक टेस्ट':({physics:'भौतिक विज्ञान',chemistry:'रसायन विज्ञान',biology:'जीव विज्ञान'}[m]+' अभ्यास टेस्ट');document.getElementById('testSubject').textContent='हर प्रश्न 1 अंक • नमूना अभ्यास';document.getElementById('result').innerHTML='';document.getElementById('submit').classList.add('hide');show('test');render();if(clock)clearInterval(clock);clock=setInterval(()=>{remaining--;document.getElementById('timer').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');if(remaining<=0)finish();},1000);}
+function render(){let q=items[idx];document.getElementById('progress').textContent='प्रश्न '+(idx+1)+' / '+items.length;document.getElementById('questions').innerHTML='<div class="question"><h3>'+(idx+1)+'. '+q[0]+'</h3>'+q[1].map((o,i)=>'<label class="option"><input type="radio" name="answer" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="answers['+idx+']='+i+'"> '+String.fromCharCode(65+i)+'. '+o+'</label>').join('')+'</div>';document.getElementById('prev').disabled=idx===0;document.getElementById('next').classList.toggle('hide',idx===items.length-1);document.getElementById('submit').classList.toggle('hide',idx!==items.length-1);}
+function move(d){idx=Math.max(0,Math.min(items.length-1,idx+d));render();}
+function finish(){if(!clock&&document.getElementById('result').innerHTML)return;clearInterval(clock);clock=null;let score=items.reduce((n,q,i)=>n+(answers[i]===q[2]?1:0),0);document.getElementById('questions').innerHTML=items.map((q,i)=>'<div class="question"><b>'+(i+1)+'. '+q[0]+'</b><p>आपका उत्तर: '+(answers[i]===undefined?'नहीं दिया':q[1][answers[i]])+'</p><p style="color:var(--green)">सही उत्तर: '+q[1][q[2]]+'</p><p>'+q[3]+'</p></div>').join('');document.getElementById('progress').textContent='टेस्ट पूरा हुआ';document.getElementById('prev').classList.add('hide');document.getElementById('next').classList.add('hide');document.getElementById('submit').classList.add('hide');document.getElementById('result').innerHTML='<div class="result"><h2>आपका परिणाम: '+score+' / '+items.length+'</h2><p>सही उत्तर: '+score+' • गलत / छोड़े गए: '+(items.length-score)+'</p><button onclick="start(mode)">दोबारा टेस्ट दें</button> <button class="secondary" onclick="show(\'home\')">डैशबोर्ड</button></div>';}
+</script></body></html>
