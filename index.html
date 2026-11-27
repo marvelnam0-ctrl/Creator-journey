@@ -28,18 +28,46 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 @media(max-width:620px){.thumb-grid{grid-template-columns:1fr}}
 
 .video-output{white-space:pre-wrap;line-height:1.6;background:#101024;border:1px solid #3b395c;border-radius:11px;padding:13px;min-height:100px;color:#eee}
+
+.home-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.home-tools a{display:block;text-decoration:none;color:var(--text);background:#131329;border:1px solid var(--line);border-radius:13px;padding:14px;transition:border-color .15s,transform .15s}
+.home-tools a:active{transform:scale(.98);border-color:var(--accent)}
+.home-tools b{display:block;font-size:14px;margin-bottom:5px}
+.home-tools span{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:12px}
+@media(max-width:420px){.home-tools{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ Creator Journey</div><span class="pill">FREE STARTER</span></header>
 <section class="hero"><div class="pill">CREATE • EDIT • SHARE</div><h1>Your creativity,<br><span class="grad">one journey.</span></h1><p class="muted">Photo preview, captions aur hashtag ideas — sab ek simple mobile-friendly jagah par.</p></section>
-<section class="card">
+
+<section class="card" id="allToolsHome">
+<h2>✨ All Creator Tools</h2>
+<p class="muted">Kisi bhi tool par tap karo — woh seedha open ho jayega.</p>
+<div class="home-tools">
+<a href="#photoTool"><b>📸 Photo Preview</b><span>Phone photo dekho</span></a>
+<a href="#captionTool"><b>✍️ Caption & Hashtags</b><span>Post text ideas banao</span></a>
+<a href="#thumbnailTool"><b>🎨 Thumbnail Maker</b><span>YouTube thumbnail design</span></a>
+<a href="#videoTool"><b>🤖 AI Video Prompt</b><span>Prompt aur storyboard</span></a>
+<a href="#bioTool"><b>🔗 Bio Link Builder</b><span>Social bio taiyar karo</span></a>
+<a href="#plannerTool"><b>🗓️ Content Planner</b><span>Posts plan karo</span></a>
+<a href="#growthTools"><b>💡 Title & Hook Ideas</b><span>Video ideas improve karo</span></a>
+<a href="#scriptTool"><b>📝 Script Outline</b><span>Video ka structure banao</span></a>
+<a href="#descriptionTool"><b>📄 Description Builder</b><span>Video description likho</span></a>
+<a href="#checklistTool"><b>✅ Publishing Checklist</b><span>Publish se pehle check karo</span></a>
+</div>
+</section>
+
+<section class="card" id="photoTool">
 <h2>📸 Photo preview</h2><div class="field"><label for="photo">Apne phone se photo chuno</label><input id="photo" type="file" accept="image/*"></div><div class="preview" id="preview">Tumhari photo yahan dikhegi.</div>
 <p class="note">Privacy: is demo mein photo sirf tumhare browser mein preview hoti hai; server par upload nahi hoti.</p>
 </section>
 <div class="grid">
-<section class="card">
+<section class="card" id="captionTool">
 <h2>✍️ Caption helper</h2>
 <div class="field"><label for="topic">Post kis baare mein hai?</label><input id="topic" placeholder="Jaise: sunset, travel, study"></div>
 <div class="field"><label for="tone">Caption style</label><select id="tone"><option value="friendly">Friendly</option><option value="motivation">Motivational</option><option value="professional">Professional</option><option value="fun">Fun</option></select></div>
@@ -60,7 +88,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 </section>
 </div>
 
-<section class="card">
+<section class="card" id="thumbnailTool">
 <h2>🎨 YouTube Thumbnail Maker</h2>
 <p class="muted">Apni photo aur title se 16:9 thumbnail banao. Design tumhare phone par hi taiyar hota hai.</p>
 <div class="thumb-grid">
@@ -77,7 +105,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <p class="note">Tip: Title chhota aur readable rakho. Photo aur text browser mein hi process hote hain; upload nahi hote.</p>
 </section>
 
-<section class="card">
+<section class="card" id="videoTool">
 <h2>🤖 AI Video Generator</h2>
 <p class="muted">Apne idea se AI video prompt aur scene-by-scene storyboard taiyar karo.</p>
 <div class="field"><label for="videoIdea">Video idea</label><textarea id="videoIdea" placeholder="Jaise: ek futuristic city mein flying cars..."></textarea></div>
@@ -92,7 +120,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="status" id="videoStatus" aria-live="polite"></div>
 </section>
 
-<section class="card">
+<section class="card" id="bioTool">
 <h2>🔗 Creator Bio Link Builder</h2>
 <p class="muted">Apne social links ko ek clean profile mein arrange karo.</p>
 <div class="field"><label for="bioName">Creator name</label><input id="bioName" maxlength="40" placeholder="Your creator name"></div>
@@ -107,7 +135,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="status" id="bioStatus" aria-live="polite"></div>
 <p class="note">This creates shareable bio text, not a hosted public profile page. Check your links before sharing.</p>
 </section>
-<section class="card">
+<section class="card" id="plannerTool">
 <h2>🗓️ Content Planner</h2>
 <p class="muted">Apne agle posts ke ideas aur planned dates save karo. Data isi browser mein rahega.</p>
 <div class="grid">
@@ -120,7 +148,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="status" id="planStatus" aria-live="polite"></div>
 </section>
 \n
-<section class="card">
+<section class="card" id="growthTools">
 <h2>💡 5 Creator Growth Tools</h2>
 <p class="muted">Paanch quick tools jo video planning aur publishing ko easy banate hain.</p>
 <div class="field"><label for="ideaTopic">1. Video topic / keyword</label><input id="ideaTopic" maxlength="90" placeholder="e.g. mobile photo editing"></div>
@@ -130,7 +158,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="actions"><button class="alt" id="copyIdeasBtn">Copy title + hooks</button></div>
 <div class="status" id="ideasStatus" aria-live="polite"></div>
 </section>
-<section class="card">
+<section class="card" id="scriptTool">
 <h2>📝 Video Script Outline</h2>
 <p class="muted">Topic se ek simple beginning, middle aur ending wala script outline banao.</p>
 <div class="field"><label for="scriptTopic">Video topic</label><input id="scriptTopic" maxlength="100" placeholder="What is your video about?"></div>
@@ -140,7 +168,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="actions"><button class="alt" id="copyScriptBtn">Copy script</button></div>
 <div class="status" id="scriptStatus" aria-live="polite"></div>
 </section>
-<section class="card">
+<section class="card" id="descriptionTool">
 <h2>📄 Video Description Builder</h2>
 <p class="muted">YouTube ya doosre platforms ke liye description ka draft taiyar karo.</p>
 <div class="field"><label for="descTitle">Video title</label><input id="descTitle" maxlength="100" placeholder="Your video title"></div>
@@ -151,7 +179,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <div class="actions"><button class="alt" id="copyDescBtn">Copy description</button></div>
 <div class="status" id="descStatus" aria-live="polite"></div>
 </section>
-<section class="card">
+<section class="card" id="checklistTool">
 <h2>✅ Publishing Checklist</h2>
 <p class="muted">Publish karne se pehle apne video ko check karo. Tick browser mein save nahi hote.</p>
 <div id="publishChecks" class="field">
@@ -165,7 +193,7 @@ footer{text-align:center;color:#777693;font-size:12px;padding:18px}
 <button class="alt" id="resetChecksBtn">Reset checklist</button>
 <div class="status" id="checkStatus" aria-live="polite"></div>
 </section>
-\n<footer>Creator Journey · Version 0.4 · Made for creators</footer>
+\n<footer>Creator Journey · Version 0.5 · Made for creators</footer>
 </div>
 <script>
 const photo=document.querySelector('#photo'),preview=document.querySelector('#preview');let photoUrl='';
