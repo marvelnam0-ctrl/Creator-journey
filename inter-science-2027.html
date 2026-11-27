@@ -47,9 +47,9 @@
 <div class="card"><div class="icon">📘</div><h3>Chapter-wise Test</h3><p>विषय और अध्याय चुनकर अभ्यास शुरू करें।</p><button onclick="show('chapter-test')">अध्याय टेस्ट</button></div>
 <div class="card"><div class="icon">✍️</div><h3>Answer Writing Practice</h3><p>2, 3 और 5 अंक के उत्तर लिखें और ड्राफ्ट सेव करें।</p><button onclick="show('answer-practice')">लिखने का अभ्यास</button></div>
 <div class="card"><div class="icon">✅</div><h3>Revision Tracker</h3><p>तीनों विषयों के पूरे किए अध्याय ट्रैक करें।</p><button onclick="show('revision-tracker')">प्रगति देखें</button></div>
-<div class="card"><div class="icon">⏳</div><h3>Exam Countdown</h3><p>आधिकारिक परीक्षा तारीख डालकर बचे दिन देखें।</p><button onclick="show('exam-countdown')">Countdown</button></div>
+<div class="card"><div class="icon">📊</div><h3>Test Score & Wrong Answer Review</h3><p>टेस्ट के बाद स्कोर, गलत उत्तर और कमजोर विषय का संकेत देखें।</p><button onclick="show('test-report')">रिपोर्ट देखें</button></div><div class="card"><div class="icon">⏳</div><h3>Exam Countdown</h3><p>आधिकारिक परीक्षा तारीख डालकर बचे दिन देखें।</p><button onclick="show('exam-countdown')">Countdown</button></div>
 <div class="card"><div class="icon">📄</div><h3>Previous / Model Papers</h3><p>उपलब्ध आधिकारिक मॉडल पेपर खोलें।</p><button onclick="show('past-papers')">पेपर खोलें</button></div></div></section>
-<section id="premium" class="hide">
+<section id="test-report" class="hide"><div class="bar"><h2>📊 टेस्ट रिपोर्ट</h2><button class="secondary" onclick="show('home')">वापस</button></div><div id="testReportContent" class="card"></div><div class="notice" style="margin-top:12px">रिपोर्ट इसी ब्राउज़र में सेव हुए टेस्टों पर आधारित है। अध्याय-स्तर की कमजोरी के लिए अध्याय-विशिष्ट प्रश्न बैंक अभी तैयार होना बाकी है।</div></section><section id="premium" class="hide">
 <div class="bar"><h2>👑 Free + Premium</h2><button class="secondary" onclick="show('home')">वापस</button></div>
 <div class="notice">यह अभी केवल प्रीव्यू है। कोई भुगतान, सदस्यता या Premium अनलॉक चालू नहीं है। अभी ऐप का उपयोग मुफ्त में जारी रखें।</div>
 <div class="grid">
@@ -300,12 +300,35 @@ biology:[
 ["PCR तकनीक का उपयोग किसके प्रवर्धन में होता है?",["DNA","वसा","स्टार्च","प्रोटीन"],0,"PCR द्वारा DNA के विशिष्ट खंड की अनेक प्रतियाँ बनाई जाती हैं।"]
 ]};
 let mode='physics',items=[],idx=0,answers={},remaining=900,clock=null;
-function show(id){['home','account','topics','papers','written','priority','subject-physics','subject-chemistry','subject-biology','test','premium','chapter-test','answer-practice','revision-tracker','exam-countdown','past-papers'].forEach(x=>{const el=document.getElementById(x);if(el)el.classList.toggle('hide',x!==id);});if(clock){clearInterval(clock);clock=null;}if(id==='revision-tracker')renderTracker();if(id==='chapter-test')updateChapterOptions();if(id==='answer-practice')loadWritingPrompt();}
+function show(id){['home','account','topics','papers','written','priority','subject-physics','subject-chemistry','subject-biology','test','premium','chapter-test','answer-practice','revision-tracker','exam-countdown','past-papers','test-report'].forEach(x=>{const el=document.getElementById(x);if(el)el.classList.toggle('hide',x!==id);});if(clock){clearInterval(clock);clock=null;}if(id==='revision-tracker')renderTracker();if(id==='test-report')renderTestReport();if(id==='chapter-test')updateChapterOptions();if(id==='answer-practice')loadWritingPrompt();}
+function renderTestReport(){
+ const host=document.getElementById('testReportContent'),h=JSON.parse(localStorage.getItem('upInterTestHistory')||'[]');
+ if(!h.length){host.innerHTML='<h3>अभी कोई टेस्ट रिकॉर्ड नहीं है</h3><p>पहले कोई अभ्यास टेस्ट दें।</p>';return;}
+ const names={physics:'Physics',chemistry:'Chemistry',biology:'Biology',mixed:'Mixed Mock'},totals={};
+ h.forEach(x=>{totals[x.mode]??={score:0,total:0,count:0};totals[x.mode].score+=x.score;totals[x.mode].total+=x.total;totals[x.mode].count++;});
+ host.innerHTML='<h3>आपकी टेस्ट प्रगति</h3>'+Object.keys(totals).map(k=>'<p><b>'+names[k]+'</b> — '+totals[k].count+' टेस्ट • '+totals[k].score+'/'+totals[k].total+' अंक ('+Math.round(100*totals[k].score/totals[k].total)+'%)</p>').join('')+'<h3>हाल के टेस्ट</h3>'+h.slice(-10).reverse().map(x=>'<p>'+names[x.mode]+' • '+x.date+' • '+x.score+'/'+x.total+' • गलत/छोड़े: '+x.wrong+'</p>').join('')+'<button class="secondary" onclick="clearTestHistory()">रिपोर्ट इतिहास मिटाएँ</button>';
+}
+function clearTestHistory(){if(confirm('क्या आप इस डिवाइस का टेस्ट इतिहास मिटाना चाहते हैं?')){localStorage.removeItem('upInterTestHistory');renderTestReport();}}
 function start(m){mode=m;items=m==='mixed'?[...bank.physics.slice(0,5),...bank.chemistry.slice(0,5),...bank.biology.slice(0,5)]:bank[m];idx=0;answers={};remaining=900;document.getElementById('testTitle').textContent=m==='mixed'?'मिश्रित मॉक टेस्ट':({physics:'भौतिक विज्ञान',chemistry:'रसायन विज्ञान',biology:'जीव विज्ञान'}[m]+' अभ्यास टेस्ट');document.getElementById('testSubject').textContent='हर प्रश्न 1 अंक • नमूना अभ्यास';document.getElementById('result').innerHTML='';document.getElementById('submit').classList.add('hide');show('test');render();if(clock)clearInterval(clock);clock=setInterval(()=>{remaining--;document.getElementById('timer').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');if(remaining<=0)finish();},1000);}
 function render(){let q=items[idx];document.getElementById('progress').textContent='प्रश्न '+(idx+1)+' / '+items.length;document.getElementById('questions').innerHTML='<div class="question"><h3>'+(idx+1)+'. '+q[0]+'</h3>'+q[1].map((o,i)=>'<label class="option"><input type="radio" name="answer" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="answers['+idx+']='+i+'"> '+String.fromCharCode(65+i)+'. '+o+'</label>').join('')+'</div>';document.getElementById('prev').disabled=idx===0;document.getElementById('next').classList.toggle('hide',idx===items.length-1);document.getElementById('submit').classList.toggle('hide',idx!==items.length-1);}
 function move(d){idx=Math.max(0,Math.min(items.length-1,idx+d));render();}
-function finish(){if(!clock&&document.getElementById('result').innerHTML)return;clearInterval(clock);clock=null;let score=items.reduce((n,q,i)=>n+(answers[i]===q[2]?1:0),0);document.getElementById('questions').innerHTML=items.map((q,i)=>'<div class="question"><b>'+(i+1)+'. '+q[0]+'</b><p>आपका उत्तर: '+(answers[i]===undefined?'नहीं दिया':q[1][answers[i]])+'</p><p style="color:var(--green)">सही उत्तर: '+q[1][q[2]]+'</p><p>'+q[3]+'</p></div>').join('');document.getElementById('progress').textContent='टेस्ट पूरा हुआ';document.getElementById('prev').classList.add('hide');document.getElementById('next').classList.add('hide');document.getElementById('submit').classList.add('hide');document.getElementById('result').innerHTML='<div class="result"><h2>आपका परिणाम: '+score+' / '+items.length+'</h2><p>सही उत्तर: '+score+' • गलत / छोड़े गए: '+(items.length-score)+'</p><button onclick="start(mode)">दोबारा टेस्ट दें</button> <button class="secondary" onclick="show(\'home\')">डैशबोर्ड</button></div>';}
-
+function finish(){
+ if(!clock&&document.getElementById('result').innerHTML)return;
+ if(clock)clearInterval(clock);clock=null;
+ let score=items.reduce((n,q,i)=>n+(answers[i]===q[2]?1:0),0);
+ const wrong=items.map((q,i)=>({q,i})).filter(x=>answers[x.i]!==x.q[2]);
+ const history=JSON.parse(localStorage.getItem('upInterTestHistory')||'[]');
+ history.push({mode,score,total:items.length,date:new Date().toLocaleDateString('hi-IN'),wrong:wrong.length});
+ localStorage.setItem('upInterTestHistory',JSON.stringify(history.slice(-50)));
+ const byMode={};history.forEach(h=>{if(h.mode!=='mixed'){byMode[h.mode]??={score:0,total:0};byMode[h.mode].score+=h.score;byMode[h.mode].total+=h.total;}});
+ const weak=Object.entries(byMode).sort((x,y)=>(x[1].score/x[1].total)-(y[1].score/y[1].total))[0];
+ document.getElementById('questions').innerHTML=items.map((q,i)=>'<div class="question"><b>'+(i+1)+'. '+safeText(q[0])+'</b><p>आपका उत्तर: '+(answers[i]===undefined?'नहीं दिया':safeText(q[1][answers[i]]))+'</p><p style="color:var(--green)">सही उत्तर: '+safeText(q[1][q[2]])+'</p><p>'+safeText(q[3]||'')+'</p>'+(answers[i]===q[2]?'<span class="mark">सही</span>':'<span style="color:#ffb4b4;font-weight:700">गलत / छोड़ा गया</span>')+'</div>').join('');
+ document.getElementById('progress').textContent='टेस्ट पूरा हुआ';
+ document.getElementById('prev').classList.add('hide');document.getElementById('next').classList.add('hide');document.getElementById('submit').classList.add('hide');
+ const review=wrong.length?'<h3>गलत उत्तरों की समीक्षा</h3>'+wrong.map(({q,i})=>'<div class="question"><b>'+(i+1)+'. '+safeText(q[0])+'</b><p>सही उत्तर: <b style="color:var(--green)">'+safeText(q[1][q[2]])+'</b></p><p>'+safeText(q[3]||'')+'</p></div>').join(''):'<p>बहुत अच्छा! इस टेस्ट में कोई गलत या छोड़ा हुआ उत्तर नहीं है।</p>';
+ const weakText=weak?'<p>कमजोर विषय का संकेत: <b>'+({physics:'Physics',chemistry:'Chemistry',biology:'Biology'}[weak[0]])+'</b> — औसत '+Math.round(100*weak[1].score/weak[1].total)+'%</p>':'';
+ document.getElementById('result').innerHTML='<div class="result"><h2>आपका स्कोर: '+score+' / '+items.length+'</h2><p>सही: '+score+' • गलत / छोड़े गए: '+wrong.length+'</p>'+weakText+'<p class="small">स्कोर इसी ब्राउज़र में सेव है। कमजोर विषय का संकेत केवल दिए गए विषय टेस्टों पर आधारित है।</p><button onclick="start(mode)">दोबारा टेस्ट दें</button> <button class="secondary" onclick="show(\'home\')">डैशबोर्ड</button></div>'+review;
+}
 const priorityExtra={
 physics:[
 ["विद्युत विभव का SI मात्रक है—",["वोल्ट","कूलॉम","न्यूटन","टेस्ला"],0,"विभव का मात्रक वोल्ट है।"],
