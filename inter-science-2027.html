@@ -34,7 +34,7 @@
 <div class="grid">
 <div class="card subject"><div class="icon">⚡</div><h3>Physics Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('physics')">Physics खोलें</button></div>
 <div class="card subject"><div class="icon">🧪</div><h3>Chemistry Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('chemistry')">Chemistry खोलें</button></div>
-<div class="card subject"><div class="icon">🧬</div><h3>Biology Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('biology')">Biology खोलें</button></div>
+<div class="card subject"><div class="icon">🧬</div><h3>Biology Master Dashboard</h3><p>20 MCQ • 20 Short • 20 Long — उत्तर सहित</p><button onclick="openSubject('biology')">Biology खोलें</button></div><div class="card subject"><div class="icon">📖</div><h3>हिंदी अध्ययन डैशबोर्ड</h3><p>व्याकरण, लेखन अभ्यास और मॉडल पेपर का मार्गदर्शन</p><button onclick="show('hindi-hub')">हिंदी खोलें</button></div>
 <div class="card subject"><div class="icon">⚡</div><h3>भौतिक विज्ञान</h3><p>महत्वपूर्ण अवधारणाएँ और अभ्यास टेस्ट</p><button onclick="start('physics')">अभ्यास करें</button></div>
 <div class="card subject"><div class="icon">🧪</div><h3>रसायन विज्ञान</h3><p>अभिक्रियाएँ, सूत्र और प्रश्न</p><button onclick="start('chemistry')">अभ्यास करें</button></div>
 <div class="card subject"><div class="icon">🧬</div><h3>जीव विज्ञान</h3><p>आनुवंशिकी, मानव शरीर और वनस्पति</p><button onclick="start('biology')">अभ्यास करें</button></div>
@@ -219,8 +219,8 @@
 <section id="test" class="hide"><div class="bar"><div><div class="small" id="testSubject">अभ्यास टेस्ट</div><h2 id="testTitle">प्रश्न</h2></div><span class="tag" id="timer">15:00</span></div><div class="small" id="progress"></div><div id="questions"></div><div class="bar"><button class="secondary" id="prev" onclick="move(-1)">पिछला</button><button id="next" onclick="move(1)">अगला</button></div><button id="submit" onclick="finish()" class="hide">टेस्ट जमा करें</button><div id="result"></div></section>
 
 <section id="chapter-test" class="hide">
-<div class="bar"><h2>📘 Chapter-wise Practice</h2><button class="secondary" onclick="show('home')">वापस</button></div>
-<div class="notice">अध्याय चुनकर अभ्यास शुरू करें। फिलहाल उपलब्ध MCQ बैंक विषय-स्तर का है; प्रश्नों को अध्याय के अनुसार टैग करने का काम आगे किया जाएगा, इसलिए इसे अध्याय-विशिष्ट पेपर न मानें।</div>
+<div class="bar"><h2>📘 अध्याय-वार अभ्यास (Chapter-wise)</h2><button class="secondary" onclick="show('home')">वापस</button></div>
+<div class="notice">अध्याय चुनकर उसी अध्याय का अभ्यास करें। अभी प्रत्येक अध्याय में 1 अध्याय-विशिष्ट MCQ उपलब्ध है; प्रश्न बैंक को अगले चरणों में बढ़ाया जाएगा। स्कोर और गलत उत्तरों की समीक्षा टेस्ट रिपोर्ट में सेव होगी।</div>
 <div class="card"><label>विषय</label><select id="ctSubject" style="width:100%;padding:12px;margin:8px 0;background:#1a2948;color:white;border-radius:8px"><option value="physics">Physics</option><option value="chemistry">Chemistry</option><option value="biology">Biology</option></select><label>अध्याय</label><select id="ctChapter" style="width:100%;padding:12px;margin:8px 0;background:#1a2948;color:white;border-radius:8px"></select><button onclick="beginChapterTest()">अभ्यास शुरू करें</button></div>
 </section>
 <section id="answer-practice" class="hide">
@@ -238,13 +238,30 @@
 </section>
 <section id="past-papers" class="hide">
 <div class="bar"><h2>📄 Previous Papers & Model Papers</h2><button class="secondary" onclick="show('home')">वापस</button></div>
-<div class="notice">सत्यापित पुराने वास्तविक प्रश्नपत्र और मॉडल पेपर अलग-अलग हैं। नीचे उपलब्ध आधिकारिक मॉडल पेपर दिए हैं; इन्हें पुराने बोर्ड पेपर नहीं कहा जा रहा।</div>
+<div class="notice">मॉडल पेपर और पुराने वास्तविक बोर्ड पेपर अलग-अलग हैं। UPMSP का आधिकारिक पोर्टल मॉडल पेपर देता है; नीचे दिए गए PYQ संग्रह बाहरी शैक्षिक वेबसाइटों के लिंक हैं, UPMSP के आधिकारिक लिंक नहीं। पेपर का वर्ष, विषय और सेट खोलकर स्वयं जाँचें।</div>
 <div class="card"><h3>Physics — Model Paper 2026–27</h3><a class="btn" href="https://upmsp.edu.in/Downloads/ModelPaper/class12/151-Physics.pdf" target="_blank" rel="noopener">PDF खोलें ↗</a></div>
 <div class="card"><h3>Chemistry — Model Paper 2026–27</h3><a class="btn" href="https://upmsp.edu.in/Downloads/ModelPaper/class12/152-Chemistry.pdf" target="_blank" rel="noopener">PDF खोलें ↗</a></div>
 <div class="card"><h3>Biology — Model Paper 2026–27</h3><a class="btn" href="https://upmsp.edu.in/Downloads/ModelPaper/class12/153-Biology.pdf" target="_blank" rel="noopener">PDF खोलें ↗</a></div>
-<div class="card"><a class="btn secondary" href="https://upmsp.edu.in/Board_ModelPaper.aspx" target="_blank" rel="noopener">UPMSP आधिकारिक मॉडल पेपर पोर्टल ↗</a></div>
+<div class="card"><a class="btn secondary" href="https://upmsp.edu.in/Board_ModelPaper.aspx" target="_blank" rel="noopener">UPMSP आधिकारिक मॉडल पेपर पोर्टल ↗</a></div><div class="card"><h3>📚 बाहरी Previous Year Paper संग्रह</h3><p>इन पृष्ठों पर उपलब्धता विषय और वर्ष के अनुसार बदल सकती है। ये UPMSP के आधिकारिक लिंक नहीं हैं।</p><p><a href="https://school.careers360.com/boards/upmsp/up-board-previous-year-question-papers-class-12-pdf-download" target="_blank" rel="noopener">सभी विषयों के पुराने प्रश्नपत्र — Careers360 ↗</a></p><p><a href="https://antrity.com/up-board-class-12/previous-year-papers/physics" target="_blank" rel="noopener">Physics PYQ संग्रह ↗</a></p><p><a href="https://antrity.com/up-board-class-12/previous-year-papers/2025" target="_blank" rel="noopener">2025 के विषयवार पेपर संग्रह ↗</a></p><p><a href="https://antrity.com/up-board-class-12/previous-year-papers/2024" target="_blank" rel="noopener">2024 के विषयवार पेपर संग्रह ↗</a></p></div>
 </section>
-<footer>UP Board Inter Science Master 2027 • अभ्यास हेतु शैक्षिक ऐप<br>यह UPMSP का आधिकारिक ऐप नहीं है।</footer>
+<section id="hindi-hub" class="hide">
+<div class="bar"><h2>📖 हिंदी अध्ययन डैशबोर्ड</h2><button class="secondary" onclick="show('home')">वापस</button></div>
+<div class="notice">यह हिंदी के लिए शुरुआती अध्ययन केंद्र है। नीचे व्याकरण के अभ्यास प्रश्न, लेखन विषय और आधिकारिक मॉडल पेपर पोर्टल दिया गया है।</div>
+<h3>व्याकरण — अभ्यास प्रश्न</h3>
+<details><summary>1. ‘विद्यालय’ में कौन-सी संधि है?</summary><div class="answer">दीर्घ स्वर संधि — विद्या + आलय।</div></details>
+<details><summary>2. ‘राजपुत्र’ में कौन-सा समास है?</summary><div class="answer">तत्पुरुष समास — राजा का पुत्र।</div></details>
+<details><summary>3. ‘नीलकमल’ में कौन-सा समास है?</summary><div class="answer">कर्मधारय समास — नीला है जो कमल।</div></details>
+<details><summary>4. ‘आँखों का तारा’ मुहावरे का अर्थ क्या है?</summary><div class="answer">बहुत प्रिय व्यक्ति।</div></details>
+<details><summary>5. ‘जो कभी न मरे’ के लिए एक शब्द लिखिए।</summary><div class="answer">अमर।</div></details>
+<details><summary>6. ‘उन्नति’ का विलोम शब्द क्या है?</summary><div class="answer">अवनति।</div></details>
+<details><summary>7. ‘जल’ का एक पर्यायवाची लिखिए।</summary><div class="answer">नीर।</div></details>
+<details><summary>8. ‘सज्जन’ का विलोम क्या है?</summary><div class="answer">दुर्जन।</div></details>
+<details><summary>9. ‘दाँत खट्टे करना’ मुहावरे का अर्थ क्या है?</summary><div class="answer">बुरी तरह परास्त करना।</div></details>
+<details><summary>10. भाषा की सबसे छोटी ध्वनि इकाई क्या कहलाती है?</summary><div class="answer">वर्ण।</div></details>
+<h3>लेखन अभ्यास</h3>
+<div class="card"><p><b>निबंध:</b> पर्यावरण संरक्षण, विद्यार्थी जीवन में अनुशासन, विज्ञान के चमत्कार, डिजिटल शिक्षा।</p><p><b>पत्र:</b> प्रधानाचार्य को अवकाश हेतु प्रार्थना-पत्र, नगर की सफाई हेतु नगर पालिका को पत्र।</p><p><b>अपठित गद्यांश:</b> गद्यांश पढ़कर शीर्षक, मुख्य विचार और शब्दार्थ लिखने का अभ्यास करें।</p></div>
+<div class="card"><h3>आधिकारिक हिंदी मॉडल पेपर</h3><p>UPMSP के आधिकारिक मॉडल पेपर पोर्टल पर कक्षा 12 हिंदी चुनें।</p><a class="btn" href="https://upmsp.edu.in/Board_ModelPaper.aspx" target="_blank" rel="noopener">UPMSP मॉडल पेपर पोर्टल ↗</a></div>
+</section><footer>UP Board Inter Science Master 2027 • अभ्यास हेतु शैक्षिक ऐप<br>यह UPMSP का आधिकारिक ऐप नहीं है।</footer>
 </main>
 <script>
 const bank={
