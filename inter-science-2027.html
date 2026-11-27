@@ -319,4 +319,20 @@ long:[
 
 };
 
+
+function safeText(v){return String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function openSubject(key){
+ show('subject-'+key);
+ const host=document.getElementById(key+'-content');
+ if(host.dataset.ready)return;
+ const mc=[...bank[key],...priorityExtra[key]];
+ let html='<h3>⭐ 20 Most Important MCQ — विकल्प व सही उत्तर</h3>';
+ html+=mc.map((q,i)=>'<details><summary><span class="mark">MCQ '+(i+1)+'</span> '+safeText(q[0])+'</summary><div class="answer">'+q[1].map((o,j)=>String.fromCharCode(65+j)+'. '+safeText(o)).join('<br>')+'<p><b style="color:var(--green)">सही उत्तर: '+String.fromCharCode(65+q[2])+'. '+safeText(q[1][q[2]])+'</b></p>'+safeText(q[3])+'</div></details>').join('');
+ html+='<h3>📝 20 Short Questions — उत्तर सहित</h3>';
+ html+=subjectQA[key].short.map((q,i)=>'<details><summary><span class="mark">Short '+(i+1)+'</span> '+safeText(q[0])+'</summary><div class="answer">'+safeText(q[1])+'</div></details>').join('');
+ html+='<h3>📚 20 Long Questions — उत्तर सहित</h3>';
+ html+=subjectQA[key].long.map((q,i)=>'<details><summary><span class="mark">Long '+(i+1)+'</span> '+safeText(q[0])+'</summary><div class="answer">'+safeText(q[1])+'</div></details>').join('');
+ host.innerHTML=html;host.dataset.ready='1';
+}
+
 </script></body></html>
